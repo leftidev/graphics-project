@@ -2,3 +2,5 @@
 build/
 # Temp folder
 temp/
+# src folder
+src/
