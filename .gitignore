@@ -1,6 +1,5 @@
 # Build results
 build/
 temp/
-src/
 windows-bin/
 linux-bin/

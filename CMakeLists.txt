@@ -13,10 +13,9 @@ elseif(UNIX AND NOT APPLE)
 endif(WIN32)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+file(GLOB SOURCE "src/*.cpp" "src/*.c")
 
-set(SOURCE_FILES main.cpp glad.c)
-
-add_executable(Graphics ${SOURCE_FILES})
+add_executable(Graphics ${SOURCE})
 
 if(WIN32)
     target_link_libraries(Graphics PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/libglfw3dll.a)
