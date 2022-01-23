@@ -1,9 +1,9 @@
-# Needed libraries for crosscompiling.. 
-# TODO: Not finished yet
+- Graphics rendering testing
+- Cross-platform (Linux, Windows)
 
+
+
+----------------------------------------------------------------
+-- Dependencies for running on Linux (tested on Ubuntu 20.04) --
+----------------------------------------------------------------
 sudo apt-get install libglfw3
-sudo apt-get install libglfw3-dev
-sudo apt-get install mesa-utils
-sudo apt-get install libc6-dev
-sudo apt-get install gcc-mingw-w64-x86-64
-sudo apt-get install mingw-w64

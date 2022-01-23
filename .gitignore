@@ -1,6 +1,6 @@
 # Build results
 build/
-# Temp folder
 temp/
-# src folder
 src/
+windows-bin/
+linux-bin/
