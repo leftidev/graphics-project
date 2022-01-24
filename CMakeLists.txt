@@ -15,7 +15,8 @@ endif(WIN32)
 # Add cmake modules
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-# Create interface
+# Create top-level interface for the general options
+# TODO: Could this be more concise? 
 add_library(project_options INTERFACE)
 
 # Add source folder
