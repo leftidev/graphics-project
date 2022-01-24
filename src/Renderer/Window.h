@@ -11,7 +11,7 @@ public:
     ~Window() {};
 
     void init(uint16_t width, uint16_t, const char* title);
-    GLFWwindow* getHandle() { return m_window; };
+    inline GLFWwindow* getHandle() { return m_window; };
 private:
     GLFWwindow* m_window;
     uint16_t m_windowWidth;

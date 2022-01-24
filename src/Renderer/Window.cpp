@@ -2,8 +2,7 @@
 
 #include <stdio.h>
 
-
-
+// Initialize GLFW, OpenGL context and glad. Create GLFW Window.
 void Window::init(uint16_t width, uint16_t height, const char* title) {
     m_windowWidth = width;
     m_windowHeight = height;
@@ -13,7 +12,7 @@ void Window::init(uint16_t width, uint16_t height, const char* title) {
         fprintf(stderr, "Unable to initialize GLFW\n");
     }
 
-    // Set OpenGL context version
+    // Setup OpenGL context
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
