@@ -22,7 +22,9 @@ add_library(project_options INTERFACE)
 # Add source folder
 add_subdirectory(src)
 
-# Enable testing and define tests
-message("BUILDING TESTS..")
-enable_testing()
-#add_subdirectory(UnitTests)
+if(UNIX AND NOT APPLE)
+    # Enable testing and define tests
+    message("BUILDING TESTS..")
+    enable_testing()
+    add_subdirectory(UnitTests)
+endif(UNIX AND NOT APPLE)
