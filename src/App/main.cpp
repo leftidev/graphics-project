@@ -3,7 +3,8 @@
 #include "Window.h"
 #include "Shader.h"
 
-
+const unsigned int WINDOWWIDTH = 800;
+const unsigned int WINDOWHEIGHT = 600;
 
 void errorCallback(int error, const char* description) {
    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -15,7 +16,10 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+   (void)window;
+   glViewport(0, 0, width, height);
+}
 
 int main(int argc, char** argv) {
    (void)argc;
@@ -24,9 +28,9 @@ int main(int argc, char** argv) {
    glfwSetErrorCallback(errorCallback);
 
    Window window;
-   window.init(800, 600, "Hello");
+   window.init(WINDOWWIDTH, WINDOWHEIGHT, "Hello");
 
-
+   glfwSetFramebufferSizeCallback(window.getHandle(), framebuffer_size_callback);
    // Specify 3 vertices with each vertex having a 3D position (x, y, z)
    // To render a 2D triangle, each vertex has z coord of 0.0
    float vertices[] = {
@@ -75,6 +79,7 @@ int main(int argc, char** argv) {
    shader2.init2(vertexData);
 
    // TODO: Do we need to specify glViewPort?
+   
 
    // render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -99,3 +104,4 @@ int main(int argc, char** argv) {
 
    return 0;
 }
+
