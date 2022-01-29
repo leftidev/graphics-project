@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 cmake_minimum_required(VERSION 3.16)
+=======
+cmake_minimum_required(VERSION 3.10)
+>>>>>>> master
 
 # Set the project name
 project(Graphics VERSION 0.0.1)
 
+<<<<<<< HEAD
 set(CMAKE_CXX_STANDARD 17)  # for c++11
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -28,3 +33,10 @@ if(UNIX AND NOT APPLE)
     enable_testing()
     add_subdirectory(UnitTests)
 endif(UNIX AND NOT APPLE)
+=======
+set(SOURCE_FILES main.cpp)
+add_executable(Graphics ${SOURCE_FILES})
+
+# Add warnings
+target_compile_options(Graphics PRIVATE -Wall -Wextra -Wpedantic -Werror)
+>>>>>>> master
