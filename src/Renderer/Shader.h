@@ -7,25 +7,14 @@
 void checkShaderCompileErrors(unsigned int shader);
 void checkShaderLinkErrors(unsigned int shaderProgram);
 
-struct Vertex {
-   float z;
-   float x;
-   float y;
-};
-
-struct Triangle {
-   Vertex vertices[3];
-};
-
 class Shader {
 public:
-    Shader() {};
-    ~Shader() {};
-    void init(float (&vertices)[9]);
-    void init2(Vertex (&vertexData)[3]);
+   Shader() {};
+   ~Shader() {};
 
-    unsigned int VAO;
-    unsigned int shaderProgram;
+   void init();   
+   void use();
+
 private:
-
+   unsigned int shaderProgram;
 };

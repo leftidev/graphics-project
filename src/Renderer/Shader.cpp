@@ -47,21 +47,7 @@ void checkShaderLinkErrors(unsigned int shaderProgram)
    }
 }
 
-void Shader::init(float (&vertices)[9]) {
-       // First process of the graphics pipeline: vertex shader
-   // Generate vertex array object
-   glGenVertexArrays(1, &VAO);  
-
-   // Manage memory on the GPU via allocation of vertex buffer object (VBO)
-   glBindVertexArray(VAO);
-   unsigned int VBO;
-   glGenBuffers(1, &VBO);  
-   glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-   // Now any buffer calls we make on GL_ARRAY_BUFFER target will be used to configure currently bound buffer VBO
-   
-   // Copy vertex data into buffer's memory:
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+void Shader::init() {
    // For OpenGL to use the vertex shader, create a shader object and create the shader:
    unsigned int vertexShader;
    vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -83,69 +69,13 @@ void Shader::init(float (&vertices)[9]) {
    glLinkProgram(shaderProgram);
 
    checkShaderLinkErrors(shaderProgram);
-   // Every shader and rendering call after glUseProgram will now use the shaders
-   glUseProgram(shaderProgram);
 
    // Delete shader objects once they're linked into the program object
    glDeleteShader(vertexShader);
    glDeleteShader(fragmentShader);  
-
-   // We have to specify how OpenGL interprets the vertex data before rendering
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-   glEnableVertexAttribArray(0); 
-   // Vertex attribute takes its data from memory managed by a VBO
-   // Which VBO it takes the data from is determined by VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer
 }
 
-void Shader::init2(Vertex (&vertexData)[3]) {
- 
-
-       // First process of the graphics pipeline: vertex shader
-   // Generate vertex array object
-   glGenVertexArrays(1, &VAO);  
-
-   // Manage memory on the GPU via allocation of vertex buffer object (VBO)
-   glBindVertexArray(VAO);
-   unsigned int VBO;
-   glGenBuffers(1, &VBO);  
-   glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-   // Now any buffer calls we make on GL_ARRAY_BUFFER target will be used to configure currently bound buffer VBO
-   
-   // Copy vertex data into buffer's memory:
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), &vertexData, GL_STATIC_DRAW);
-   //fprintf(stderr, "\nTRINAGLE %f", vertexData[0].x);
-
-   // For OpenGL to use the vertex shader, create a shader object and create the shader:
-   unsigned int vertexShader;
-   vertexShader = glCreateShader(GL_VERTEX_SHADER);
-   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-   glCompileShader(vertexShader);
-   checkShaderCompileErrors(vertexShader);
-
-   // Second process of the graphics pipeline: fragment shader
-   unsigned int fragmentShader;
-   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-   glCompileShader(fragmentShader);
-   checkShaderCompileErrors(fragmentShader);
-
-   // Link both shader objects into a shader program, that can be used for rendering
-   shaderProgram = glCreateProgram();
-   glAttachShader(shaderProgram, vertexShader);
-   glAttachShader(shaderProgram, fragmentShader);
-   glLinkProgram(shaderProgram);
-
-   checkShaderLinkErrors(shaderProgram);
+void Shader::use() {
    // Every shader and rendering call after glUseProgram will now use the shaders
    glUseProgram(shaderProgram);
-
-   // Delete shader objects once they're linked into the program object
-   glDeleteShader(vertexShader);
-   glDeleteShader(fragmentShader);  
-
-   // We have to specify how OpenGL interprets the vertex data before rendering
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-   glEnableVertexAttribArray(0); 
-   // Vertex attribute takes its data from memory managed by a VBO
-   // Which VBO it takes the data from is determined by VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer
 }

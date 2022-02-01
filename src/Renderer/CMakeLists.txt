@@ -3,7 +3,7 @@ add_library(renderer_folder INTERFACE)
 target_include_directories(renderer_folder INTERFACE .)
 target_include_directories(renderer_folder INTERFACE ${PROJECT_SOURCE_DIR}/include)
 
-add_library(window Window.cpp Shader.cpp)
+add_library(window Window.cpp Shader.cpp Sprite.cpp)
 
 target_link_libraries(window
     PUBLIC
