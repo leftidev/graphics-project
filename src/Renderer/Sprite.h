@@ -18,11 +18,11 @@ public:
     Sprite() {};
     ~Sprite() {};
 
-    void init();
+    void init(const Vertex (& vertexData)[3]);
     void draw();
 private:
     Position position;
-    Vertex vertexData[3];
+    Vertex* m_vertexData;
 
     unsigned int VAO;
     unsigned int VBO;

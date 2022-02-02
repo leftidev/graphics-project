@@ -36,8 +36,22 @@ int main(int argc, char** argv) {
    Shader shader;
    shader.init();
 
+   Vertex vertexData[3];
+   vertexData[0] = {-0.5f, -0.5f, 0.0f};
+   vertexData[1] = {0.5f, -0.5f, 0.0f};
+   vertexData[2] = {0.0f, 0.5f, 0.0f};
+
+   Vertex vertexData2[] = {{-1.5f, -0.2f, 0.0f}, {0.5f, -0.15f, 0.0f}, {0.0f, 0.35f, 0.0f}};
+   Vertex vertexData3[] = {{1.0f, -1.0f, 0.0f}, {0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+
    Sprite sprite;
-   sprite.init();
+   sprite.init(vertexData);
+
+   Sprite sprite2;
+   sprite2.init(vertexData2);
+
+   Sprite sprite3;
+   sprite3.init(vertexData3);
 
    // render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -51,6 +65,8 @@ int main(int argc, char** argv) {
       shader.use();
 
       sprite.draw();
+      sprite2.draw();
+      sprite3.draw();
 
       // check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());
