@@ -1,6 +1,7 @@
 #include "Sprite.h"
 
-void Sprite::init(const Vertex (& vertexData)[3]) {
+// First test
+void Sprite::init(const Vertex (&vertexData)[3]) {
     // First process of the graphics pipeline: vertex shader
     // Generate vertex array object
     glGenVertexArrays(1, &VAO);  
@@ -11,6 +12,40 @@ void Sprite::init(const Vertex (& vertexData)[3]) {
 
     // Copy vertex data into buffer's memory:
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+
+    // Unbind the buffer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+// Testing 2
+void Sprite::init2(Vertex *vertexData) {
+    // First process of the graphics pipeline: vertex shader
+    // Generate vertex array object
+    glGenVertexArrays(1, &VAO);  
+
+    glGenBuffers(1, &VBO);  
+    // Now any buffer calls we make on GL_ARRAY_BUFFER target will be used to configure currently bound buffer VBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // Copy vertex data into buffer's memory:
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3, vertexData, GL_STATIC_DRAW);
+
+    // Unbind the buffer
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+// Testing 3
+void Sprite::init3(const Vertex &vertexData) {
+    // First process of the graphics pipeline: vertex shader
+    // Generate vertex array object
+    glGenVertexArrays(1, &VAO);  
+
+    glGenBuffers(1, &VBO);  
+    // Now any buffer calls we make on GL_ARRAY_BUFFER target will be used to configure currently bound buffer VBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    // Copy vertex data into buffer's memory:
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3, &vertexData, GL_STATIC_DRAW);
 
     // Unbind the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

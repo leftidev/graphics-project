@@ -48,10 +48,10 @@ int main(int argc, char** argv) {
    sprite.init(vertexData);
 
    Sprite sprite2;
-   sprite2.init(vertexData2);
+   sprite2.init2(vertexData2);
 
    Sprite sprite3;
-   sprite3.init(vertexData3);
+   sprite3.init3(*vertexData3);
 
    // render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
