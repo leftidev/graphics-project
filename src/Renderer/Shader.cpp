@@ -1,12 +1,23 @@
 #include "Shader.h"
 
+
 // Create a very basic vertex shader in GLSL
 // Give input vertex data in normalized device coordinates
-const char* vertexShaderSource = "#version 330 core\n"
+const char* vertexShaderSource2 = "#version 330 core\n"
     "layout (location = 0) in vec3 Pos;\n"
     "void main()\n"
     "{\n"
     "   gl_Position = vec4(Pos.x, Pos.y, Pos.z, 1.0);\n"
+    "}\0";
+
+// Testing
+const char* vertexShaderSource = "#version 330 core\n"
+    "layout(location = 0) in vec3 vertexPosition_modelspace;\n"
+    "uniform mat4 MVP;\n"
+    "void main()\n"
+    "{\n"
+    "   vec4 v = vec4(vertexPosition_modelspace,1);\n"
+    "   gl_Position = MVP * v;\n"
     "}\0";
 
 // Create a very basic fragment shader in GLSL
@@ -73,9 +84,30 @@ void Shader::init() {
    // Delete shader objects once they're linked into the program object
    glDeleteShader(vertexShader);
    glDeleteShader(fragmentShader);  
+
 }
 
-void Shader::use() {
+// TODO: Stopped here while testing linmath and mat4x4
+void Shader::use(mat4x4 MVP, float x) {
    // Every shader and rendering call after glUseProgram will now use the shaders
    glUseProgram(shaderProgram);
+
+
+   mat4x4_identity(MVP);
+
+   mat4x4_translate(MVP, x, 0.0f, -0.9f);
+
+   int i,j;
+   for(i=0; i<4; ++i) {
+      for(j=0; j<4; ++j)
+         printf("%f, ", MVP[i][j]);
+      printf("\n");
+   }
+
+   GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+
+   // Send our transformation to the currently bound shader,
+	// in the "MVP" uniform
+	// For each model you render, since the MVP will be different (at least the M part)
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 }

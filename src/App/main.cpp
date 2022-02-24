@@ -53,6 +53,10 @@ int main(int argc, char** argv) {
    Sprite sprite3;
    sprite3.init3(*vertexData3);
 
+   mat4x4 MVP;
+
+   float x = -0.7f;
+
    // render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
       // input
@@ -62,7 +66,8 @@ int main(int argc, char** argv) {
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT);
    
-      shader.use();
+      // TODO: Stopped here while testing linmath and mat4x4
+      shader.use(MVP, x);
 
       sprite.draw();
       sprite2.draw();

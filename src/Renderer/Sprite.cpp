@@ -60,8 +60,16 @@ void Sprite::draw() {
 
     // We have to specify how OpenGL interprets the vertex data before rendering
     // Position attribute pointer
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glVertexAttribPointer(
+		   0,                  // attribute 0, must match the layout in the shader
+		   3,                  // size
+		   GL_FLOAT,           // type
+		   GL_FALSE,           // normalized
+		   0,  // stride
+		   (void*)0            // array buffer offset
+		);
     
+    // Starting from vertex 0; 3 vertices total -> 1 triangle
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     glDisableVertexAttribArray(0);
