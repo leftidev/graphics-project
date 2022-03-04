@@ -13,11 +13,11 @@ void errorCallback(int error, const char* description) {
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-        printf("YEP");
+   if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-        printf("YEP2");
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void processInput(GLFWwindow *window)
