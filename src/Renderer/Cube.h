@@ -13,9 +13,8 @@ public:
     Cube() {};
     ~Cube() {};
 
-    void init(const Vertex (&vertexData)[3]);
-    void init2(Vertex *vertexData);
-    void init3(const Vertex &vertexData);
+    void init(Vertex *vertexData);
+    void init(const Vertex &vertexData);
 
     void draw();
 private:

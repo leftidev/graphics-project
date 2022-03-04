@@ -15,10 +15,9 @@ public:
    ~Shader() {};
 
    void init();   
-   void use(mat4x4 MVP, float x);
+   void use();
 
-
-private:
    unsigned int shaderProgram;
 
+private:
 };

@@ -84,32 +84,10 @@ void Shader::init() {
    // Delete shader objects once they're linked into the program object
    glDeleteShader(vertexShader);
    glDeleteShader(fragmentShader);  
-
 }
 
 // TODO: Stopped here while testing linmath and mat4x4
-void Shader::use(mat4x4 MVP, float x) {
+void Shader::use() {
    // Every shader and rendering call after glUseProgram will now use the shaders
    glUseProgram(shaderProgram);
-
-
-   mat4x4_identity(MVP);
-
-   mat4x4_translate(MVP, x, 0.0f, -0.9f);
-
-/*
-   int i,j;
-   for(i=0; i<4; ++i) {
-      for(j=0; j<4; ++j)
-         printf("%f, ", MVP[i][j]);
-      printf("\n");
-   }
-*/
-
-   GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
-
-   // Send our transformation to the currently bound shader,
-	// in the "MVP" uniform
-	// For each model you render, since the MVP will be different (at least the M part)
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 }

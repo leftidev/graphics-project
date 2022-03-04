@@ -17,7 +17,7 @@ Notes
 4.3.2022
 
 - Added mouse button callback for toggling between wireframe and fill mode
-- General refactoring
+- General refactoring and renaming
 
 
 24.2.2022

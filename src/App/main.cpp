@@ -4,8 +4,10 @@
 #include "Shader.h"
 #include "Cube.h"
 
+
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
+
 
 void errorCallback(int error, const char* description)
 {
@@ -33,6 +35,29 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
+void translate(unsigned int ShaderID, mat4x4 MVP, float x)
+{
+   mat4x4_identity(MVP);
+
+   mat4x4_translate(MVP, x, 0.0f, -0.9f);
+
+/*
+   int i,j;
+   for(i=0; i<4; ++i) {
+      for(j=0; j<4; ++j)
+         printf("%f, ", MVP[i][j]);
+      printf("\n");
+   }
+*/
+
+   GLuint MatrixID = glGetUniformLocation(ShaderID, "MVP");
+
+   // Send our transformation to the currently bound shader,
+	// in the "MVP" uniform
+	// For each model you render, since the MVP will be different (at least the M part)
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+}
+
 int main(int argc, char** argv)
 {
    (void)argc;
@@ -50,26 +75,20 @@ int main(int argc, char** argv)
    Shader shader;
    shader.init();
 
-   Vertex vertexData[3];
-   vertexData[0] = {-0.5f, -0.5f, 0.0f};
-   vertexData[1] = {0.5f, -0.5f, 0.0f};
-   vertexData[2] = {0.0f, 0.5f, 0.0f};
-
-   Vertex vertexData2[] = {{-1.5f, -0.2f, 0.0f}, {0.5f, -0.15f, 0.0f}, {0.0f, 0.35f, 0.0f}};
-   Vertex vertexData3[] = {{1.0f, -1.0f, 0.0f}, {0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 0.0f}};
+   // Cube vertex data
+   Vertex vertices[] = {
+      {-0.5f, -0.5f, 0.0f},
+      { 0.5f, -0.5f, 0.0f}, 
+      { 0.0f,  0.5f, 0.0f}
+   };
 
    Cube cube;
-   cube.init(vertexData);
+   cube.init(*vertices);
 
-   Cube cube2;
-   cube2.init2(vertexData2);
-
-   Cube cube3;
-   cube3.init3(*vertexData3);
-
+   // Model View Projection matrix
    mat4x4 MVP;
 
-   float x = -0.7f;
+   float x = 0.0f;
 
    // render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -81,11 +100,11 @@ int main(int argc, char** argv)
       glClear(GL_COLOR_BUFFER_BIT);
    
       // TODO: Stopped here while testing linmath and mat4x4
-      shader.use(MVP, x);
+      shader.use();
+
+      translate(shader.shaderProgram, MVP, x);
 
       cube.draw();
-      cube2.draw();
-      cube3.draw();
 
       // check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());
