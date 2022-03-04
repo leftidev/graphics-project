@@ -14,6 +14,12 @@ void errorCallback(int error, const char* description)
    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_E && action == GLFW_PRESS)
+        printf("Key E PRESSED!\n");
+}
+
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
@@ -69,6 +75,7 @@ int main(int argc, char** argv)
    window.init(WINDOWWIDTH, WINDOWHEIGHT, "Hello");
 
    // Set callbacks
+   glfwSetKeyCallback(window.getHandle(), keyCallback);
    glfwSetMouseButtonCallback(window.getHandle(), mouseButtonCallback);
    glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
