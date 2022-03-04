@@ -8,6 +8,15 @@
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
 
+// GLOBAL VARIABLES (Don't worry; For testing purposes)
+static float x = 0.0f;
+static float y = 0.0f;
+static float z = 0.0f;
+
+static float sx = 1.0f;
+static float sy = 1.0f;
+static float sz = 1.0f;
+
 
 void errorCallback(int error, const char* description)
 {
@@ -16,20 +25,36 @@ void errorCallback(int error, const char* description)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-   if (key == GLFW_KEY_E && action == GLFW_PRESS)
-      printf("Key E PRESSED!\n");
-
    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+   {
+      y += 0.1f;
       printf("Up pressed!\n");
-
+   }
    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+   {
+      y -= 0.1f;
       printf("Down pressed!\n");
-
+   }  
    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+   {
+      x -= 0.1f;
       printf("Left pressed!\n");
-
+   }
    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+   {
+      x += 0.1f;
       printf("Right pressed!\n");
+   }
+   if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+   {
+      sz += 0.1f;
+      printf("Z pressed!\n");
+   }
+   if (key == GLFW_KEY_X && action == GLFW_PRESS)
+   {
+      sz -= 0.1f;
+      printf("X pressed!\n");
+   }
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -53,22 +78,26 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
-void translate(unsigned int ShaderID, mat4x4 MVP, float x)
+void translate(unsigned int ShaderID, mat4x4 MVP)
 {
    mat4x4_identity(MVP);
+   mat4x4_translate(MVP, x, y, z);
+}
 
-   mat4x4_translate(MVP, x, 0.0f, -0.9f);
+// TODO: Fix to function correctly
+void scale(unsigned int ShaderID, mat4x4 MVP)
+{
+   mat4x4_identity(MVP);
+   //mat4x4_scale(MVP, MVP, x);
+   mat4x4_scale_aniso(MVP, MVP, sx, sy, sz);
+}
 
-/*
-   int i,j;
-   for(i=0; i<4; ++i) {
-      for(j=0; j<4; ++j)
-         printf("%f, ", MVP[i][j]);
-      printf("\n");
-   }
-*/
+void transform(unsigned int ShaderID, mat4x4 MVP) 
+{
+   scale(ShaderID, MVP);
+   translate(ShaderID, MVP);
 
-   GLuint MatrixID = glGetUniformLocation(ShaderID, "MVP");
+   GLuint MatrixID = glGetUniformLocation(ShaderID, "transform");
 
    // Send our transformation to the currently bound shader,
 	// in the "MVP" uniform
@@ -107,7 +136,13 @@ int main(int argc, char** argv)
    // Model View Projection matrix
    mat4x4 MVP;
 
-   float x = 0.0f;
+   // Matrix coords for debugging
+   int i,j;
+   for(i=0; i<4; ++i) {
+      for(j=0; j<4; ++j)
+         printf("%f, ", MVP[i][j]);
+      printf("\n");
+   }
 
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -120,7 +155,7 @@ int main(int argc, char** argv)
 
       shader.use();
 
-      translate(shader.shaderProgram, MVP, x);
+      transform(shader.shaderProgram, MVP);
 
       cube.draw();
 
@@ -134,4 +169,3 @@ int main(int argc, char** argv)
 
    return 0;
 }
-

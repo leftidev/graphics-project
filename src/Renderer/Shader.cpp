@@ -3,7 +3,7 @@
 
 // Create a very basic vertex shader in GLSL
 // Give input vertex data in normalized device coordinates
-const char* vertexShaderSource2 = "#version 330 core\n"
+const char* vertexShaderSource3 = "#version 330 core\n"
     "layout (location = 0) in vec3 Pos;\n"
     "void main()\n"
     "{\n"
@@ -11,13 +11,22 @@ const char* vertexShaderSource2 = "#version 330 core\n"
     "}\0";
 
 // Testing
-const char* vertexShaderSource = "#version 330 core\n"
+const char* vertexShaderSource2 = "#version 330 core\n"
     "layout(location = 0) in vec3 vertexPosition_modelspace;\n"
     "uniform mat4 MVP;\n"
     "void main()\n"
     "{\n"
     "   vec4 v = vec4(vertexPosition_modelspace,1);\n"
     "   gl_Position = MVP * v;\n"
+    "}\0";
+
+// Testing 2
+const char* vertexShaderSource = "#version 330 core\n"
+    "layout(location = 0) in vec3 aPos;\n"
+    "uniform mat4 transform;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = transform * vec4(aPos, 1.0f);\n"
     "}\0";
 
 // Create a very basic fragment shader in GLSL

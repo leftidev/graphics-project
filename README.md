@@ -18,6 +18,8 @@ Notes
 
 - Added mouse button callback for toggling between wireframe and fill mode
 - General refactoring and renaming
+- Implemented matrix translate via keyboard input
+- NOTE: Scaling is still WIP and doesn't work correctly 
 
 
 24.2.2022
