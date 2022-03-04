@@ -16,8 +16,20 @@ void errorCallback(int error, const char* description)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_E && action == GLFW_PRESS)
-        printf("Key E PRESSED!\n");
+   if (key == GLFW_KEY_E && action == GLFW_PRESS)
+      printf("Key E PRESSED!\n");
+
+   if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+      printf("Up pressed!\n");
+
+   if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+      printf("Down pressed!\n");
+
+   if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
+      printf("Left pressed!\n");
+
+   if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
+      printf("Right pressed!\n");
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -97,16 +109,15 @@ int main(int argc, char** argv)
 
    float x = 0.0f;
 
-   // render loop
+   // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
-      // input
+      // Input
       processInput(window.getHandle());
 
-      // rendering commands
+      // Rendering commands
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT);
-   
-      // TODO: Stopped here while testing linmath and mat4x4
+
       shader.use();
 
       translate(shader.shaderProgram, MVP, x);
