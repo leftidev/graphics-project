@@ -2,12 +2,13 @@
 
 #include "Window.h"
 #include "Shader.h"
-#include "Sprite.h"
+#include "Cube.h"
 
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
 
-void errorCallback(int error, const char* description) {
+void errorCallback(int error, const char* description)
+{
    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
@@ -20,15 +21,16 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+   (void)window;
+   glViewport(0, 0, width, height);
+}
+
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-   (void)window;
-   glViewport(0, 0, width, height);
 }
 
 int main(int argc, char** argv)
@@ -43,7 +45,7 @@ int main(int argc, char** argv)
 
    // Set callbacks
    glfwSetMouseButtonCallback(window.getHandle(), mouseButtonCallback);
-   glfwSetFramebufferSizeCallback(window.getHandle(), framebuffer_size_callback);
+   glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
    Shader shader;
    shader.init();
@@ -56,14 +58,14 @@ int main(int argc, char** argv)
    Vertex vertexData2[] = {{-1.5f, -0.2f, 0.0f}, {0.5f, -0.15f, 0.0f}, {0.0f, 0.35f, 0.0f}};
    Vertex vertexData3[] = {{1.0f, -1.0f, 0.0f}, {0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 0.0f}};
 
-   Sprite sprite;
-   sprite.init(vertexData);
+   Cube cube;
+   cube.init(vertexData);
 
-   Sprite sprite2;
-   sprite2.init2(vertexData2);
+   Cube cube2;
+   cube2.init2(vertexData2);
 
-   Sprite sprite3;
-   sprite3.init3(*vertexData3);
+   Cube cube3;
+   cube3.init3(*vertexData3);
 
    mat4x4 MVP;
 
@@ -81,9 +83,9 @@ int main(int argc, char** argv)
       // TODO: Stopped here while testing linmath and mat4x4
       shader.use(MVP, x);
 
-      sprite.draw();
-      sprite2.draw();
-      sprite3.draw();
+      cube.draw();
+      cube2.draw();
+      cube3.draw();
 
       // check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());

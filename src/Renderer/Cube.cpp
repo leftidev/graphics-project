@@ -1,7 +1,7 @@
-#include "Sprite.h"
+#include "Cube.h"
 
 // First test
-void Sprite::init(const Vertex (&vertexData)[3]) {
+void Cube::init(const Vertex (&vertexData)[3]) {
     // First process of the graphics pipeline: vertex shader
     // Generate vertex array object
     glGenVertexArrays(1, &VAO);  
@@ -18,7 +18,7 @@ void Sprite::init(const Vertex (&vertexData)[3]) {
 }
 
 // Testing 2
-void Sprite::init2(Vertex *vertexData) {
+void Cube::init2(Vertex *vertexData) {
     // First process of the graphics pipeline: vertex shader
     // Generate vertex array object
     glGenVertexArrays(1, &VAO);  
@@ -35,7 +35,7 @@ void Sprite::init2(Vertex *vertexData) {
 }
 
 // Testing 3
-void Sprite::init3(const Vertex &vertexData) {
+void Cube::init3(const Vertex &vertexData) {
     // First process of the graphics pipeline: vertex shader
     // Generate vertex array object
     glGenVertexArrays(1, &VAO);  
@@ -51,7 +51,7 @@ void Sprite::init3(const Vertex &vertexData) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Sprite::draw() {
+void Cube::draw() {
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
