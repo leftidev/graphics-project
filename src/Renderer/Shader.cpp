@@ -97,12 +97,14 @@ void Shader::use(mat4x4 MVP, float x) {
 
    mat4x4_translate(MVP, x, 0.0f, -0.9f);
 
+/*
    int i,j;
    for(i=0; i<4; ++i) {
       for(j=0; j<4; ++j)
          printf("%f, ", MVP[i][j]);
       printf("\n");
    }
+*/
 
    GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
 

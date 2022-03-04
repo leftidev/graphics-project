@@ -11,6 +11,15 @@ void errorCallback(int error, const char* description) {
    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+        printf("YEP");
+
+   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+        printf("YEP2");
+}
+
 void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -22,7 +31,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
    glViewport(0, 0, width, height);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
    (void)argc;
    (void)argv;
    
@@ -31,6 +41,8 @@ int main(int argc, char** argv) {
    Window window;
    window.init(WINDOWWIDTH, WINDOWHEIGHT, "Hello");
 
+   // Set callbacks
+   glfwSetMouseButtonCallback(window.getHandle(), mouseButtonCallback);
    glfwSetFramebufferSizeCallback(window.getHandle(), framebuffer_size_callback);
 
    Shader shader;
