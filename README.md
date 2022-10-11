@@ -13,6 +13,11 @@ ROADMAP
 
 Notes
 -----
+11.10.2022
+
+- Moved reading shader sources from external shader files
+- Re-structured and renamed project folders
+
 4.3.2022
 
 - Added mouse button callback for toggling between wireframe and fill mode
