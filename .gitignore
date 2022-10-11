@@ -4,4 +4,8 @@ build/
 temp/
 windows-bin/
 linux-bin/
+# 3rd party libraries
+dlls/
+include/libglfw3.a
+include/libglfw3dll.a
 gitcommands.md
