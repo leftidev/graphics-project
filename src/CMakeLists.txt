@@ -10,9 +10,9 @@ target_link_libraries(glad PRIVATE project_folder)
 
 
 # Main executable
-add_executable(App App/main.cpp)
+add_executable(GraphicsApp App/main.cpp)
 if(WIN32)
-    target_link_libraries(App
+    target_link_libraries(GraphicsApp
         PRIVATE
             project_folder
             project_options
