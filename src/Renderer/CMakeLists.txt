@@ -9,4 +9,5 @@ target_link_libraries(window
     PUBLIC
         project_options
         renderer_folder
+        ${PROJECT_SOURCE_DIR}/include/libglfw3dll.a
 )

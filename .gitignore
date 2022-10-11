@@ -1,4 +1,5 @@
 # Build results
+.vscode/
 build/
 temp/
 windows-bin/
