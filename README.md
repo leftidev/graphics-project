@@ -1,6 +1,10 @@
 - Graphics rendering testing using GLFW and OpenGL
 - Cross-platform (Linux, Windows)
 
+TODO(PROJECT)
+
+- Add building glfw3 to the project
+
 ROADMAP
 -------
 1. 3D Cube (wireframe mode)
