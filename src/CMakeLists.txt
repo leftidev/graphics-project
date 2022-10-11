@@ -5,7 +5,7 @@ target_include_directories(project_folder INTERFACE
 )
 
 # Add glad
-add_library(glad glad.c)
+add_library(glad ThirdParty/glad.c)
 target_link_libraries(glad PRIVATE project_folder)
 
 

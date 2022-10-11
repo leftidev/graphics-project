@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "Window.h"
-#include "Shader.h"
-#include "Cube.h"
+#include "window.hpp"
+#include "shader.hpp"
+#include "cube.hpp"
 
 
 const unsigned int WINDOWWIDTH = 800;
@@ -68,7 +68,6 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-   (void)window;
    glViewport(0, 0, width, height);
 }
 
@@ -121,7 +120,7 @@ int main(int argc, char** argv)
    glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
    Shader shader;
-   shader.init();
+   shader.init("../data/shaders/SimpleVertexShader.glsl", "../data/shaders/SimpleFragmentShader.glsl");
 
    // Cube vertex data
    Vertex vertices[] = {
@@ -131,7 +130,7 @@ int main(int argc, char** argv)
    };
 
    Cube cube;
-   cube.init(*vertices);
+   cube.init(vertices);
 
    // Model View Projection matrix
    mat4x4 MVP;

@@ -1,6 +1,9 @@
 #pragma once
 
 #include <stdio.h>
+#include <string>
+#include <fstream>
+#include <sstream>
 
 #include <glad/glad.h> 
 
@@ -11,10 +14,10 @@ void checkShaderLinkErrors(unsigned int shaderProgram);
 
 class Shader {
 public:
-   Shader() {};
-   ~Shader() {};
+   Shader() = default;
+   ~Shader() = default;
 
-   void init();   
+   void init(const char *vertex_file_path, const char *fragment_file_path);   
    void use();
 
    unsigned int shaderProgram;

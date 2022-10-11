@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "shader.hpp"
 
 
 // Create a very basic vertex shader in GLSL
@@ -67,19 +67,56 @@ void checkShaderLinkErrors(unsigned int shaderProgram)
    }
 }
 
-void Shader::init() {
+void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
    // For OpenGL to use the vertex shader, create a shader object and create the shader:
    unsigned int vertexShader;
    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+
+   // Read the Vertex Shader code from the file
+	std::string vertexShaderCode;
+	std::ifstream vertexShaderStream(vertexFilePath, std::ios::in);
+	if(vertexShaderStream.is_open())
+   {
+		std::stringstream sstr;
+		sstr << vertexShaderStream.rdbuf();
+		vertexShaderCode = sstr.str();
+		vertexShaderStream.close();
+	}
+   else
+   {
+      printf("Unable to open %s. Are you in the right directory ?\n", vertexFilePath);
+	}
+
+   // Compile Vertex Shader
+	printf("Compiling vertex shader : %s\n", vertexFilePath);
+   char const *vertexSourcePointer = vertexShaderCode.c_str();
+   glShaderSource(vertexShader, 1, &vertexSourcePointer, NULL);
    glCompileShader(vertexShader);
+
    checkShaderCompileErrors(vertexShader);
+   
 
    // Second process of the graphics pipeline: fragment shader
    unsigned int fragmentShader;
    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+
+
+	// Read the Fragment Shader code from the file
+	std::string fragmentShaderCode;
+	std::ifstream fragmentShaderStream(fragmentFilePath, std::ios::in);
+	if(fragmentShaderStream.is_open()){
+		std::stringstream sstr;
+		sstr << fragmentShaderStream.rdbuf();
+		fragmentShaderCode = sstr.str();
+		fragmentShaderStream.close();
+	}
+
+   // Compile Fragment Shader
+	printf("Compiling fragment shader : %s\n", fragmentFilePath);
+   char const *fragmentSourcePointer = fragmentShaderCode.c_str();
+   glShaderSource(fragmentShader, 1, &fragmentSourcePointer, NULL);
    glCompileShader(fragmentShader);
+
    checkShaderCompileErrors(fragmentShader);
 
    // Link both shader objects into a shader program, that can be used for rendering
@@ -89,6 +126,10 @@ void Shader::init() {
    glLinkProgram(shaderProgram);
 
    checkShaderLinkErrors(shaderProgram);
+
+   // Detach shaders
+   glDetachShader(shaderProgram, vertexShader);
+	glDetachShader(shaderProgram, fragmentShader);
 
    // Delete shader objects once they're linked into the program object
    glDeleteShader(vertexShader);

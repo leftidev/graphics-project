@@ -1,7 +1,8 @@
-#include "Cube.h"
+#include "cube.hpp"
 
 
 void Cube::init(Vertex *vertexData) {
+    // Needs to be done only once!
     // First process of the graphics pipeline: vertex shader
     // Generate vertex array object
     glGenVertexArrays(1, &VAO);  
@@ -12,22 +13,6 @@ void Cube::init(Vertex *vertexData) {
 
     // Copy vertex data into buffer's memory:
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3, vertexData, GL_STATIC_DRAW);
-
-    // Unbind the buffer
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void Cube::init(const Vertex &vertexData) {
-    // First process of the graphics pipeline: vertex shader
-    // Generate vertex array object
-    glGenVertexArrays(1, &VAO);  
-
-    glGenBuffers(1, &VBO);  
-    // Now any buffer calls we make on GL_ARRAY_BUFFER target will be used to configure currently bound buffer VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    // Copy vertex data into buffer's memory:
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 3, &vertexData, GL_STATIC_DRAW);
 
     // Unbind the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -47,7 +32,7 @@ void Cube::draw() {
         3,                  // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized
-        0,  // stride
+        0,                  // stride
         (void*)0            // array buffer offset
     );
     

@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "window.hpp"
 
 #include <stdio.h>
 
