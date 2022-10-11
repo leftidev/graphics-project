@@ -95,11 +95,9 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
 
    checkShaderCompileErrors(vertexShader);
    
-
    // Second process of the graphics pipeline: fragment shader
    unsigned int fragmentShader;
    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
 
 	// Read the Fragment Shader code from the file
 	std::string fragmentShaderCode;
@@ -136,7 +134,6 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
    glDeleteShader(fragmentShader);  
 }
 
-// TODO: Stopped here while testing linmath and mat4x4
 void Shader::use() {
    // Every shader and rendering call after glUseProgram will now use the shaders
    glUseProgram(shaderProgram);
