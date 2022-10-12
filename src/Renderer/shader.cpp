@@ -54,80 +54,79 @@ void checkShaderCompileErrors(unsigned int shader)
 }
 
 // Check for compile-time errors on shader linking
-void checkShaderLinkErrors(unsigned int shaderProgram)
+void checkShaderLinkErrors(unsigned int ID)
 {
    int  success;
    char infoLog[512];
-   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+   glGetProgramiv(ID, GL_LINK_STATUS, &success);
 
    if(!success)
    {
-      glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+      glGetProgramInfoLog(ID, 512, NULL, infoLog);
       fprintf(stderr, "SHADER ERROR LINKING: Linking shader program failed!\n %s", infoLog);
    }
 }
 
 void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
-   // For OpenGL to use the vertex shader, create a shader object and create the shader:
+   // 1. retrieve the vertex/fragment source code from filePath
+    std::string vertexCode;
+    std::string fragmentCode;
+    std::ifstream vShaderFile;
+    std::ifstream fShaderFile;
+    // ensure ifstream objects can throw exceptions:
+    vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    try 
+    {
+        // open files
+        vShaderFile.open(vertexFilePath);
+        fShaderFile.open(fragmentFilePath);
+        std::stringstream vShaderStream, fShaderStream;
+        // read file's buffer contents into streams
+        vShaderStream << vShaderFile.rdbuf();
+        fShaderStream << fShaderFile.rdbuf();		
+        // close file handlers
+        vShaderFile.close();
+        fShaderFile.close();
+        // convert stream into string
+        vertexCode   = vShaderStream.str();
+        fragmentCode = fShaderStream.str();		
+    }
+    catch(std::ifstream::failure e)
+    {
+        printf("SHADER ERROR: File not read successfully.");
+    }
+
    unsigned int vertexShader;
    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-   // Read the Vertex Shader code from the file
-	std::string vertexShaderCode;
-	std::ifstream vertexShaderStream(vertexFilePath, std::ios::in);
-	if(vertexShaderStream.is_open())
-   {
-		std::stringstream sstr;
-		sstr << vertexShaderStream.rdbuf();
-		vertexShaderCode = sstr.str();
-		vertexShaderStream.close();
-	}
-   else
-   {
-      printf("Unable to open %s. Are you in the right directory ?\n", vertexFilePath);
-	}
-
-   // Compile Vertex Shader
-	printf("Compiling vertex shader : %s\n", vertexFilePath);
-   char const *vertexSourcePointer = vertexShaderCode.c_str();
-   glShaderSource(vertexShader, 1, &vertexSourcePointer, NULL);
-   glCompileShader(vertexShader);
-
-   checkShaderCompileErrors(vertexShader);
-   
-   // Second process of the graphics pipeline: fragment shader
    unsigned int fragmentShader;
    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-	// Read the Fragment Shader code from the file
-	std::string fragmentShaderCode;
-	std::ifstream fragmentShaderStream(fragmentFilePath, std::ios::in);
-	if(fragmentShaderStream.is_open()){
-		std::stringstream sstr;
-		sstr << fragmentShaderStream.rdbuf();
-		fragmentShaderCode = sstr.str();
-		fragmentShaderStream.close();
-	}
+   
+   // Compile Vertex Shader
+	printf("Compiling vertex shader : %s\n", vertexFilePath);
+   char const *vertexSourcePointer = vertexCode.c_str();
+   glShaderSource(vertexShader, 1, &vertexSourcePointer, NULL);
+   glCompileShader(vertexShader);
+   checkShaderCompileErrors(vertexShader);
 
    // Compile Fragment Shader
 	printf("Compiling fragment shader : %s\n", fragmentFilePath);
-   char const *fragmentSourcePointer = fragmentShaderCode.c_str();
+   char const *fragmentSourcePointer = fragmentCode.c_str();
    glShaderSource(fragmentShader, 1, &fragmentSourcePointer, NULL);
    glCompileShader(fragmentShader);
-
    checkShaderCompileErrors(fragmentShader);
 
    // Link both shader objects into a shader program, that can be used for rendering
-   shaderProgram = glCreateProgram();
-   glAttachShader(shaderProgram, vertexShader);
-   glAttachShader(shaderProgram, fragmentShader);
-   glLinkProgram(shaderProgram);
+   ID = glCreateProgram();
+   glAttachShader(ID, vertexShader);
+   glAttachShader(ID, fragmentShader);
+   glLinkProgram(ID);
 
-   checkShaderLinkErrors(shaderProgram);
+   checkShaderLinkErrors(ID);
 
    // Detach shaders
-   glDetachShader(shaderProgram, vertexShader);
-	glDetachShader(shaderProgram, fragmentShader);
+   glDetachShader(ID, vertexShader);
+	glDetachShader(ID, fragmentShader);
 
    // Delete shader objects once they're linked into the program object
    glDeleteShader(vertexShader);
@@ -136,5 +135,18 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
 
 void Shader::use() {
    // Every shader and rendering call after glUseProgram will now use the shaders
-   glUseProgram(shaderProgram);
+   glUseProgram(ID);
 }
+
+void Shader::setBool(const std::string &name, bool value) const
+{         
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); 
+}
+void Shader::setInt(const std::string &name, int value) const
+{ 
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), value); 
+}
+void Shader::setFloat(const std::string &name, float value) const
+{ 
+    glUniform1f(glGetUniformLocation(ID, name.c_str()), value); 
+} 

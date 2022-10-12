@@ -8,7 +8,6 @@ target_include_directories(project_folder INTERFACE
 add_library(glad ThirdParty/glad.c)
 target_link_libraries(glad PRIVATE project_folder)
 
-
 # Main executable
 add_executable(GraphicsApp App/main.cpp)
 if(WIN32)
