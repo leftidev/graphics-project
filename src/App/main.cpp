@@ -12,6 +12,11 @@
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
 
+enum PolygonMode {
+    LINE,
+    FILL
+};
+
 // GLOBAL VARIABLES (Don't worry; For testing purposes)
 static float x = 0.0f;
 static float y = 0.0f;
@@ -20,6 +25,8 @@ static float z = 0.0f;
 static float sx = 1.0f;
 static float sy = 1.0f;
 static float sz = 1.0f;
+
+static PolygonMode mode = FILL;
 
 
 void errorCallback(int error, const char* description)
@@ -58,6 +65,21 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
    {
       sz -= 0.1f;
       printf("X pressed!\n");
+   }
+   if (key == GLFW_KEY_C && action == GLFW_PRESS)
+   {
+      if(mode == FILL)
+      {
+         mode = LINE;
+         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+         printf("Wireframe mode on\n");
+      }
+      else
+      {
+         mode = FILL;
+         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+         printf("Wireframe mode off\n");
+      }
    }
 }
 
@@ -171,7 +193,7 @@ int main(int argc, char** argv)
    glGenerateMipmap(GL_TEXTURE_2D);
 */
 
-   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   //
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
       // Input
