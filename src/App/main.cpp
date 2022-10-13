@@ -4,11 +4,6 @@
 #include "shader.hpp"
 #include "cube.hpp"
 
-// Inclusion of stb_image.h. This creates the implementation.
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
-
-
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
 
@@ -146,10 +141,11 @@ int main(int argc, char** argv)
    glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
    Shader shader;
-   shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
-   int vertexColorLocation = glGetUniformLocation(shader.ID, "ourColor");
+   shader.init("../data/shaders/texture_vertex.vs", "../data/shaders/texture_fragment.fs");
+   //int vertexColorLocation = glGetUniformLocation(shader.ID, "ourColor");
    //shader.setFloat("ourColor", 1.0f);
 
+   /*
    // Cube vertex data
    Vertex vertices[] = {
      {0.5f,  0.5f, 0.0f},  // top right
@@ -157,11 +153,21 @@ int main(int argc, char** argv)
      {-0.5f, -0.5f, 0.0f},  // bottom left
      {-0.5f,  0.5f, 0.0f}   // top left 
    };
+   */
+
+   // Cube vertex data
+   Vertex vertices[] = {
+      // positions          // colors           // texture coords
+      { 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f},   // top right
+      { 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f},   // bottom right
+      {-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // bottom left
+      {-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f}    // top left 
+   };
 
    unsigned int indices[] = {
-    0, 1, 3, // first triangle
-    1, 2, 3 // second triangle
-};
+      0, 1, 3, // first triangle
+      1, 2, 3  // second triangle
+   };
 
    Cube cube;
    cube.init(vertices, indices);
@@ -177,23 +183,6 @@ int main(int argc, char** argv)
       printf("\n");
    }
 
-/*
-   // Let's test stb_image.h to load textures
-   int width, height, nrChannels;
-   unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0); 
-
-   // Generate a texture in OpenGL
-   unsigned int texture;
-   glGenTextures(1, &texture);  
-
-   // Bind texture
-   glBindTexture(GL_TEXTURE_2D, texture);  
-   // Generate the texture
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-   glGenerateMipmap(GL_TEXTURE_2D);
-*/
-
-   //
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
       // Input
@@ -204,11 +193,11 @@ int main(int argc, char** argv)
       glClear(GL_COLOR_BUFFER_BIT);
 
       shader.use();
-
+/*
       float timeValue = glfwGetTime();
       float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
       glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-
+*/
       transform(shader.ID, MVP);
 
       cube.draw();

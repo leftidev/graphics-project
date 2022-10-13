@@ -5,15 +5,19 @@
 
 
 typedef struct {
-    vec3 point;
+    vec3 position;
+    vec3 color;
+    vec2 textureCoordinate;
 } Vertex;
-
-
 
 class Cube {
 public:
     Cube() {};
-    ~Cube() {};
+    ~Cube() {
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &EBO);
+    };
 
     void init(Vertex *vertexData, unsigned int *indices);
 
@@ -21,6 +25,7 @@ public:
 private:
     Vertex vertexData;
 
+    unsigned int texture;
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
