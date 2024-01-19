@@ -147,16 +147,6 @@ int main(int argc, char** argv)
    //int vertexColorLocation = glGetUniformLocation(shader.ID, "ourColor");
    //shader.setFloat("ourColor", 1.0f);
 
-   /*
-   // Cube vertex data
-   Vertex vertices[] = {
-     {0.5f,  0.5f, 0.0f},  // top right
-     {0.5f, -0.5f, 0.0f},  // bottom right
-     {-0.5f, -0.5f, 0.0f},  // bottom left
-     {-0.5f,  0.5f, 0.0f}   // top left 
-   };
-   */
-
    // Cube vertex data
    Vertex vertices[] = {
       // positions          // colors           // texture coords
@@ -174,21 +164,14 @@ int main(int argc, char** argv)
    Cube cube;
    cube.init(vertices, indices);
 
-   // Model View Projection matrix
-   mat4x4 MVP;
-
    // Model View Projection matrix is a handy tool to separate transformations cleanly.
    // Model matrix: translation*rotation*scale, ORDER MATTERS. 
    // Something that doesn’t move will be at the center of the world.
-
-   // View matrix = Camera matrix
-   // 
-   mat4x4 model, projection, mvp;
-
    /*
       ModelViewProjection : multiplication of our 3 matrices
       mvp = Projection * View * Model; 
    */
+   mat4x4 proj, view, model, mvp;
 
    // Matrix coords for debugging
    /*
@@ -214,18 +197,31 @@ int main(int argc, char** argv)
       float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
       glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 */
+      // Create transformations
+      mat4x4_identity(model);
+      mat4x4_identity(view);
+      mat4x4_identity(proj);
 
       // Testing transformations
-      //mat4x4_identity(model);
-      mat4x4_translate(model, x, y, z);
       mat4x4_rotate_Y(model, model, (float) glfwGetTime());
       mat4x4_rotate_Z(model, model, (float) glfwGetTime());
       mat4x4_scale_aniso(model, model, sz, sz, sz);
-      mat4x4_ortho(projection, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
-      mat4x4_mul(mvp, projection, model);
+      mat4x4_translate(view, x, y, -3.0f);
+      //mat4x4_ortho(proj, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
+      mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
+
+      // retrieve the matrix uniform locations
+      unsigned int modelLoc = glGetUniformLocation(shader.ID, "model");
+      unsigned int viewLoc  = glGetUniformLocation(shader.ID, "view");
+      // pass them to the shaders (3 different ways)
+      glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
+      glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+
+      // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+      shader.setMat4("projection", proj);
 
       shader.use();
-      transform(shader.ID, mvp);
+      //transform(shader.ID, mvp);
 
       cube.draw();
 
