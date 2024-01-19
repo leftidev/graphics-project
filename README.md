@@ -23,6 +23,7 @@ Patch notes
 19.1.2024
 
 - Added example of scaling and rotating the cube via MVP matrix
+- Updated example of cube to use a correct MVP matrix in the shader for going 3D
 
 13.10.2022
 
