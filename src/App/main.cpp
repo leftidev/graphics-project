@@ -6,6 +6,7 @@
 
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
+const float RATIO = WINDOWWIDTH / (float) WINDOWHEIGHT;
 
 enum PolygonMode {
     LINE,
@@ -100,22 +101,22 @@ void processInput(GLFWwindow *window)
 
 void translate(unsigned int ShaderID, mat4x4 MVP)
 {
-   mat4x4_identity(MVP);
+   //mat4x4_identity(MVP);
    mat4x4_translate(MVP, x, y, z);
 }
 
 // TODO: Fix to function correctly
 void scale(unsigned int ShaderID, mat4x4 MVP)
 {
-   mat4x4_identity(MVP);
-   //mat4x4_scale(MVP, MVP, x);
-   mat4x4_scale_aniso(MVP, MVP, sx, sy, sz);
+   //mat4x4_identity(MVP);
+   mat4x4_scale(MVP, MVP, sz);
+   //mat4x4_scale_aniso(MVP, MVP, sx, sy, sz);
 }
 
 void transform(unsigned int ShaderID, mat4x4 MVP) 
 {
-   scale(ShaderID, MVP);
-   translate(ShaderID, MVP);
+   //scale(ShaderID, MVP);
+   //translate(ShaderID, MVP);
 
    GLuint MatrixID = glGetUniformLocation(ShaderID, "transform");
 
@@ -141,7 +142,8 @@ int main(int argc, char** argv)
    glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
    Shader shader;
-   shader.init("../data/shaders/texture_vertex.vs", "../data/shaders/texture_fragment.fs");
+   //shader.init("../data/shaders/texture_vertex.vs", "../data/shaders/texture_fragment.fs");
+   shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
    //int vertexColorLocation = glGetUniformLocation(shader.ID, "ourColor");
    //shader.setFloat("ourColor", 1.0f);
 
@@ -175,14 +177,29 @@ int main(int argc, char** argv)
    // Model View Projection matrix
    mat4x4 MVP;
 
+   // Model View Projection matrix is a handy tool to separate transformations cleanly.
+   // Model matrix: translation*rotation*scale, ORDER MATTERS. 
+   // Something that doesn’t move will be at the center of the world.
+
+   // View matrix = Camera matrix
+   // 
+   mat4x4 model, projection, mvp;
+
+   /*
+      ModelViewProjection : multiplication of our 3 matrices
+      mvp = Projection * View * Model; 
+   */
+
    // Matrix coords for debugging
+   /*
    int i,j;
    for(i=0; i<4; ++i) {
       for(j=0; j<4; ++j)
          printf("%f, ", MVP[i][j]);
       printf("\n");
    }
-
+   */
+   
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
       // Input
@@ -192,13 +209,23 @@ int main(int argc, char** argv)
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT);
 
-      shader.use();
 /*
       float timeValue = glfwGetTime();
       float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
       glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 */
-      transform(shader.ID, MVP);
+
+      // Testing transformations
+      //mat4x4_identity(model);
+      mat4x4_translate(model, x, y, z);
+      mat4x4_rotate_Y(model, model, (float) glfwGetTime());
+      mat4x4_rotate_Z(model, model, (float) glfwGetTime());
+      mat4x4_scale_aniso(model, model, sz, sz, sz);
+      mat4x4_ortho(projection, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
+      mat4x4_mul(mvp, projection, model);
+
+      shader.use();
+      transform(shader.ID, mvp);
 
       cube.draw();
 

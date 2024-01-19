@@ -20,6 +20,14 @@ ROADMAP
 
 Patch notes
 -----------
+19.1.2024
+
+- Added example of scaling and rotating the cube via MVP matrix
+
+13.10.2022
+
+- Added texture loading via stb_image, texture binding
+
 12.10.2022
 
 - Modified rendering code to use element buffer objects
