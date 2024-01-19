@@ -13,7 +13,7 @@ enum PolygonMode {
     FILL
 };
 
-// GLOBAL VARIABLES (Don't worry; For testing purposes)
+// GLOBAL VARIABLES (For testing purposes)
 static float x = 0.0f;
 static float y = 0.0f;
 static float z = 0.0f;
@@ -192,11 +192,6 @@ int main(int argc, char** argv)
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT);
 
-/*
-      float timeValue = glfwGetTime();
-      float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-      glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-*/
       // Create transformations
       mat4x4_identity(model);
       mat4x4_identity(view);
@@ -210,13 +205,9 @@ int main(int argc, char** argv)
       //mat4x4_ortho(proj, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
       mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
 
-      // retrieve the matrix uniform locations
-      unsigned int modelLoc = glGetUniformLocation(shader.ID, "model");
-      unsigned int viewLoc  = glGetUniformLocation(shader.ID, "view");
-      // pass them to the shaders (3 different ways)
-      glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
-      glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-
+   // Retrieve matrix uniform locations and pass them to shaders
+      shader.setMat4("model", model);
+      shader.setMat4("view", view);
       // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
       shader.setMat4("projection", proj);
 
