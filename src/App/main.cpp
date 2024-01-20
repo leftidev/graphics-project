@@ -3,6 +3,7 @@
 #include "window.hpp"
 #include "shader.hpp"
 #include "cube.hpp"
+//#include "rectangle.hpp"
 
 const unsigned int WINDOWWIDTH = 800;
 const unsigned int WINDOWHEIGHT = 600;
@@ -141,13 +142,21 @@ int main(int argc, char** argv)
    glfwSetMouseButtonCallback(window.getHandle(), mouseButtonCallback);
    glfwSetFramebufferSizeCallback(window.getHandle(), framebufferSizeCallback);
 
+   // configure global opengl state
+   // -----------------------------
+   glEnable(GL_DEPTH_TEST);
+
+
    Shader shader;
    //shader.init("../data/shaders/texture_vertex.vs", "../data/shaders/texture_fragment.fs");
-   shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
+   //shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
+   shader.init("../data/shaders/cube.vs", "../data/shaders/cube.fs");
+   
    //int vertexColorLocation = glGetUniformLocation(shader.ID, "ourColor");
    //shader.setFloat("ourColor", 1.0f);
 
    // Cube vertex data
+   /*
    Vertex vertices[] = {
       // positions          // colors           // texture coords
       { 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f},   // top right
@@ -155,14 +164,77 @@ int main(int argc, char** argv)
       {-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // bottom left
       {-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f}    // top left 
    };
-
+*/
    unsigned int indices[] = {
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
    };
 
-   Cube cube;
-   cube.init(vertices, indices);
+   //Rectangle rect;
+   //rect.init(vertices, indices);
+
+
+   Vertex vertices[] = {
+   {-0.5f, -0.5f, -0.5f,  0.0f, 0.0f },
+   {  0.5f, -0.5f, -0.5f,  1.0f, 0.0f},
+   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
+   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
+   { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f},
+   { -0.5f, -0.5f, -0.5f,  0.0f, 0.0f},
+
+   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
+   {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f},
+   {  0.5f,  0.5f,  0.5f,  1.0f, 1.0f},
+   {  0.5f,  0.5f,  0.5f,  1.0f, 1.0f},
+   { -0.5f,  0.5f,  0.5f,  0.0f, 1.0f},
+   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
+
+   { -0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
+   { -0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
+   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
+   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
+   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
+   { -0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
+
+   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
+   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
+   {  0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
+   {  0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
+   {  0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
+   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
+
+   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
+   {  0.5f, -0.5f, -0.5f,  1.0f, 1.0f},
+   {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f},
+   {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f},
+   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
+   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
+
+   { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f},
+   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
+   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
+   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
+   { -0.5f,  0.5f,  0.5f,  0.0f, 0.0f},
+   { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f}
+};
+
+
+// world space positions of our cubes
+   vec3 cubePositions[] = {
+      { 0.0f,  0.0f,  0.0f},
+      { 2.0f,  5.0f, -15.0f},
+      {-1.5f, -2.2f, -2.5f},
+      {-3.8f, -2.0f, -12.3f},
+      { 2.4f, -0.4f, -3.5f},
+      {-1.7f,  3.0f, -7.5f},
+      { 1.3f, -2.0f, -2.5f},
+      { 1.5f,  2.0f, -2.5f},
+      { 1.5f,  0.2f, -1.5f},
+      {-1.3f,  1.0f, -1.5f}
+   };
+
+   Cube cubes;
+   cubes.init(vertices);
 
    // Model View Projection matrix is a handy tool to separate transformations cleanly.
    // Model matrix: translation*rotation*scale, ORDER MATTERS. 
@@ -171,7 +243,7 @@ int main(int argc, char** argv)
       ModelViewProjection : multiplication of our 3 matrices
       mvp = Projection * View * Model; 
    */
-   mat4x4 proj, view, model, mvp;
+   mat4x4 proj, view, model;
 
    // Matrix coords for debugging
    /*
@@ -190,31 +262,51 @@ int main(int argc, char** argv)
 
       // Rendering commands
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
-      glClear(GL_COLOR_BUFFER_BIT);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // Create transformations
-      mat4x4_identity(model);
+      //mat4x4_identity(model);
       mat4x4_identity(view);
       mat4x4_identity(proj);
 
-      // Testing transformations
-      mat4x4_rotate_Y(model, model, (float) glfwGetTime());
-      mat4x4_rotate_Z(model, model, (float) glfwGetTime());
-      mat4x4_scale_aniso(model, model, sz, sz, sz);
-      mat4x4_translate(view, x, y, -3.0f);
+      // Test transformations
+      //mat4x4_rotate_X(model, model, (float) glfwGetTime());
+      //mat4x4_rotate_Y(model, model, (float) glfwGetTime());
+      //mat4x4_rotate_Z(model, model, (float) glfwGetTime());
+      //mat4x4_scale_aniso(model, model, sz, sz, sz);
+      //mat4x4_translate(view, x, y, -3.0f);
       //mat4x4_ortho(proj, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
       mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
+      mat4x4_translate(view, 0.0f, 0.0f, -3.0f);
 
-   // Retrieve matrix uniform locations and pass them to shaders
-      shader.setMat4("model", model);
-      shader.setMat4("view", view);
-      // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+      // Retrieve matrix uniform locations and pass them to shaders
+      //shader.setMat4("model", model);
       shader.setMat4("projection", proj);
+      shader.setMat4("view", view);
+      // NOTE: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+
 
       shader.use();
-      //transform(shader.ID, mvp);
 
-      cube.draw();
+      //rect.draw();
+
+      // render cubes
+      //glBindVertexArray(VAO);
+      for (unsigned int i = 0; i < 10; i++)
+      {
+         // calculate the model matrix for each object and pass it to shader before drawing
+         mat4x4_identity(model);
+
+         mat4x4_translate(model, cubePositions[i][0], cubePositions[i][1], cubePositions[i][2]);
+         mat4x4_rotate_X(model, model, (float) glfwGetTime());
+         mat4x4_rotate_Y(model, model, (float) glfwGetTime());
+         mat4x4_rotate_Z(model, model, (float) glfwGetTime());
+
+         shader.setMat4("model", model);
+
+         cubes.draw();
+      }
+
 
       // check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());
