@@ -20,6 +20,10 @@ ROADMAP
 
 Patch notes
 -----------
+20.1.2024
+
+- Added 3D cubes and 10 of them rotating on the scene
+
 19.1.2024
 
 - Added example of scaling and rotating the cube via MVP matrix
