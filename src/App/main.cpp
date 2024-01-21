@@ -152,8 +152,6 @@ int main(int argc, char** argv)
    //shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
    shader.init("../data/shaders/cube.vs", "../data/shaders/cube.fs");
    
-   //int vertexColorLocation = glGetUniformLocation(shader.ID, "ourColor");
-   //shader.setFloat("ourColor", 1.0f);
 
    // Cube vertex data
    /*
@@ -243,17 +241,9 @@ int main(int argc, char** argv)
       ModelViewProjection : multiplication of our 3 matrices
       mvp = Projection * View * Model; 
    */
+
    mat4x4 proj, view, model;
 
-   // Matrix coords for debugging
-   /*
-   int i,j;
-   for(i=0; i<4; ++i) {
-      for(j=0; j<4; ++j)
-         printf("%f, ", MVP[i][j]);
-      printf("\n");
-   }
-   */
    
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -265,9 +255,16 @@ int main(int argc, char** argv)
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // Create transformations
-      //mat4x4_identity(model);
       mat4x4_identity(view);
       mat4x4_identity(proj);
+
+      mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
+      mat4x4_translate(view, 0.0f, 0.0f, -3.0f);
+
+      // Retrieve matrix uniform locations and pass them to shaders
+      shader.setMat4("projection", proj);
+      shader.setMat4("view", view);
+      // NOTE: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
       // Test transformations
       //mat4x4_rotate_X(model, model, (float) glfwGetTime());
@@ -276,22 +273,8 @@ int main(int argc, char** argv)
       //mat4x4_scale_aniso(model, model, sz, sz, sz);
       //mat4x4_translate(view, x, y, -3.0f);
       //mat4x4_ortho(proj, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
-      mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
-      mat4x4_translate(view, 0.0f, 0.0f, -3.0f);
 
-      // Retrieve matrix uniform locations and pass them to shaders
-      //shader.setMat4("model", model);
-      shader.setMat4("projection", proj);
-      shader.setMat4("view", view);
-      // NOTE: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-
-
-      shader.use();
-
-      //rect.draw();
-
-      // render cubes
-      //glBindVertexArray(VAO);
+      shader.enable();
       for (unsigned int i = 0; i < 10; i++)
       {
          // calculate the model matrix for each object and pass it to shader before drawing
@@ -304,7 +287,7 @@ int main(int argc, char** argv)
 
          shader.setMat4("model", model);
 
-         cubes.draw();
+         cubes.draw(shader);
       }
 
 
