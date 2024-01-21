@@ -2,12 +2,8 @@
 
 #include "window.hpp"
 #include "shader.hpp"
-#include "cube.hpp"
-//#include "rectangle.hpp"
+#include "renderer.hpp"
 
-const unsigned int WINDOWWIDTH = 800;
-const unsigned int WINDOWHEIGHT = 600;
-const float RATIO = WINDOWWIDTH / (float) WINDOWHEIGHT;
 
 enum PolygonMode {
     LINE,
@@ -135,7 +131,7 @@ int main(int argc, char** argv)
    glfwSetErrorCallback(errorCallback);
 
    Window window;
-   window.init(WINDOWWIDTH, WINDOWHEIGHT, "Hello");
+   window.init(800, 600, "Hello");
 
    // Set callbacks
    glfwSetKeyCallback(window.getHandle(), keyCallback);
@@ -146,30 +142,10 @@ int main(int argc, char** argv)
    // -----------------------------
    glEnable(GL_DEPTH_TEST);
 
-
-   Shader shader;
-   //shader.init("../data/shaders/texture_vertex.vs", "../data/shaders/texture_fragment.fs");
-   //shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
-   shader.init("../data/shaders/cube.vs", "../data/shaders/cube.fs");
-   
-
-   // Cube vertex data
-   /*
-   Vertex vertices[] = {
-      // positions          // colors           // texture coords
-      { 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f},   // top right
-      { 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f},   // bottom right
-      {-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f},   // bottom left
-      {-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f}    // top left 
-   };
-*/
    unsigned int indices[] = {
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
    };
-
-   //Rectangle rect;
-   //rect.init(vertices, indices);
 
 
    Vertex vertices[] = {
@@ -231,20 +207,9 @@ int main(int argc, char** argv)
       {-1.3f,  1.0f, -1.5f}
    };
 
-   Cube cubes;
+   Renderer cubes;
    cubes.init(vertices);
 
-   // Model View Projection matrix is a handy tool to separate transformations cleanly.
-   // Model matrix: translation*rotation*scale, ORDER MATTERS. 
-   // Something that doesn’t move will be at the center of the world.
-   /*
-      ModelViewProjection : multiplication of our 3 matrices
-      mvp = Projection * View * Model; 
-   */
-
-   mat4x4 proj, view, model;
-
-   
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
       // Input
@@ -254,42 +219,7 @@ int main(int argc, char** argv)
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      // Create transformations
-      mat4x4_identity(view);
-      mat4x4_identity(proj);
-
-      mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
-      mat4x4_translate(view, 0.0f, 0.0f, -3.0f);
-
-      // Retrieve matrix uniform locations and pass them to shaders
-      shader.setMat4("projection", proj);
-      shader.setMat4("view", view);
-      // NOTE: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-
-      // Test transformations
-      //mat4x4_rotate_X(model, model, (float) glfwGetTime());
-      //mat4x4_rotate_Y(model, model, (float) glfwGetTime());
-      //mat4x4_rotate_Z(model, model, (float) glfwGetTime());
-      //mat4x4_scale_aniso(model, model, sz, sz, sz);
-      //mat4x4_translate(view, x, y, -3.0f);
-      //mat4x4_ortho(proj, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
-
-      shader.enable();
-      for (unsigned int i = 0; i < 10; i++)
-      {
-         // calculate the model matrix for each object and pass it to shader before drawing
-         mat4x4_identity(model);
-
-         mat4x4_translate(model, cubePositions[i][0], cubePositions[i][1], cubePositions[i][2]);
-         mat4x4_rotate_X(model, model, (float) glfwGetTime());
-         mat4x4_rotate_Y(model, model, (float) glfwGetTime());
-         mat4x4_rotate_Z(model, model, (float) glfwGetTime());
-
-         shader.setMat4("model", model);
-
-         cubes.draw(shader);
-      }
-
+      cubes.draw();
 
       // check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());

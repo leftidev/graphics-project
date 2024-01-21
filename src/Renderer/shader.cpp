@@ -134,32 +134,15 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
 }
 
 void Shader::enable() {
-   // Every shader and rendering call after glUseProgram will now use the shader
+   // Every shader and rendering call after glUseProgram will use the shader
    glUseProgram(ID);
 }
 
 void Shader::disable() {
-   // Every shader and rendering call after glUseProgram will now use the shader
    glUseProgram(0);
 }
 
-void Shader::setBool(const std::string &name, bool value) const
-{         
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); 
-}
-void Shader::setInt(const std::string &name, int value) const
-{ 
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value); 
-}
-void Shader::setFloat(const std::string &name, float value) const
-{ 
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value); 
-} 
-void Shader::setMat4(const std::string &name, const mat4x4 &mat) const
-{
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
-}
-void Shader::enableAttribute(const std::string &name, int count, int stride, void* ptr) const
+void Shader::enableAttribute(const std::string &name, int count, int stride, void* ptr)
 {
     GLint attr = glGetAttribLocation(ID, name.c_str());
     if (attr == -1) 
@@ -173,9 +156,10 @@ void Shader::enableAttribute(const std::string &name, int count, int stride, voi
     }
 }
 
-void Shader::disableAttribute(const std::string& name) const {
+void Shader::disableAttribute(const std::string& name)
+{
     GLint attr = glGetAttribLocation(ID, name.c_str());
-    if (attr == -1)
+    if(attr == -1)
     {
         fprintf(stderr, "Shader has no attribute called '%s'\n", name);
     } 
@@ -183,6 +167,41 @@ void Shader::disableAttribute(const std::string& name) const {
     {
         glDisableVertexAttribArray(attr);  
     }
+}
+
+void Shader::setTexture(const std::string& name, int index)
+{
+    GLint location = glGetUniformLocation(ID, name.c_str());
+
+    if(location == -1) 
+    {
+        fprintf(stderr, "Shader has no uniform called '%s'", name);
+    } 
+    else 
+    {
+        glActiveTexture(GL_TEXTURE0 + index);
+
+        // glBindTexture with correct parameters
+        //glBindTexture(texture_type(asset_hndl_ptr(&t)), texture_handle(asset_hndl_ptr(&t)));
+        glUniform1i(location, index);
+    }
+}
+
+void Shader::setBool(const std::string &name, bool value)
+{         
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); 
+}
+void Shader::setInt(const std::string &name, int value)
+{ 
+    glUniform1i(glGetUniformLocation(ID, name.c_str()), value); 
+}
+void Shader::setFloat(const std::string &name, float value)
+{ 
+    glUniform1f(glGetUniformLocation(ID, name.c_str()), value); 
+} 
+void Shader::setMat4(const std::string &name, const mat4x4 &mat)
+{
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
 /*

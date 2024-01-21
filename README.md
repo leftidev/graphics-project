@@ -25,6 +25,8 @@ Patch notes
 - Updated shader to have functions for enabling/disabling vertex attributes
 - Cube now takes reference to shader for more convenient vertex attribute handling
 - Redundant code removed from Cube initialization
+- Started decoupling code to a renderer
+    * Created texture, renderer classes
 
 20.1.2024
 

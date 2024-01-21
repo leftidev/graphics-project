@@ -9,11 +9,10 @@
 #include "common.h"
 
 
-
-class Cube {
+class Renderer {
 public:
-    Cube() {};
-    ~Cube() {
+    Renderer() {};
+    ~Renderer() {
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
         //glDeleteBuffers(1, &EBO);
@@ -21,12 +20,14 @@ public:
 
     void init(Vertex *vertexData);
 
-    void draw(Shader& shader);
+    void draw();
 private:
-    //Vertex vertexData;
+    void render(Shader& shader);
 
     Texture m_texture{};
-    //unsigned int texture;
+
+    Shader m_shader;
+
     unsigned int VAO;
     unsigned int VBO;
     //unsigned int EBO;

@@ -2,8 +2,8 @@
 
 
 // Create the implementation of stb_image by including it
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb/stb_image.h"
 
 void Cube::init(Vertex *vertexData) {
     // Needs to be done only once!
@@ -21,28 +21,6 @@ void Cube::init(Vertex *vertexData) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices) * 6, indices, GL_STATIC_DRAW);
 */
 
-    // Load and create textures
-    glGenTextures(1, &texture);  
-    // Bind texture
-    glBindTexture(GL_TEXTURE_2D, texture);  
-    // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // Load and generate the texture
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("../data/images/container.jpg", &width, &height, &nrChannels, 0); 
-    if(data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        printf("Failed to load texture");
-    }
-    stbi_image_free(data);
 
     // Unbind the buffer
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -51,7 +29,7 @@ void Cube::init(Vertex *vertexData) {
 
 void Cube::draw(Shader& shader) {
     // bind Texture
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture.getHandle());
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
