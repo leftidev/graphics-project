@@ -49,21 +49,21 @@ void checkShaderCompileErrors(unsigned int shader)
    if(!success)
    {
       glGetShaderInfoLog(shader, 512, NULL, infoLog);
-      fprintf(stderr, "SHADER ERROR COMPILATION: Shader compilation failed!\n %s", infoLog);
+      fprintf(stderr, "SHADER ERROR COMPILATION: Shader compilation failed.\n '%s'\n", infoLog);
    }
 }
 
 // Check for compile-time errors on shader linking
-void checkShaderLinkErrors(unsigned int ID)
+void checkShaderLinkErrors(unsigned int shader)
 {
    int  success;
    char infoLog[512];
-   glGetProgramiv(ID, GL_LINK_STATUS, &success);
+   glGetProgramiv(shader, GL_LINK_STATUS, &success);
 
    if(!success)
    {
-      glGetProgramInfoLog(ID, 512, NULL, infoLog);
-      fprintf(stderr, "SHADER ERROR LINKING: Linking shader program failed!\n %s", infoLog);
+      glGetProgramInfoLog(shader, 512, NULL, infoLog);
+      fprintf(stderr, "SHADER ERROR LINKING: Linking shader program failed.\n '%s'\n", infoLog);
    }
 }
 
@@ -103,14 +103,14 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
    
    // Compile Vertex Shader
-	printf("Compiling vertex shader : %s\n", vertexFilePath);
+	printf("Compiling vertex shader : '%s'\n", vertexFilePath);
    char const *vertexSourcePointer = vertexCode.c_str();
    glShaderSource(vertexShader, 1, &vertexSourcePointer, NULL);
    glCompileShader(vertexShader);
    checkShaderCompileErrors(vertexShader);
 
    // Compile Fragment Shader
-	printf("Compiling fragment shader : %s\n", fragmentFilePath);
+    printf("Compiling fragment shader : '%s'\n", fragmentFilePath);
    char const *fragmentSourcePointer = fragmentCode.c_str();
    glShaderSource(fragmentShader, 1, &fragmentSourcePointer, NULL);
    glCompileShader(fragmentShader);
@@ -133,9 +133,14 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
    glDeleteShader(fragmentShader);  
 }
 
-void Shader::use() {
-   // Every shader and rendering call after glUseProgram will now use the shaders
+void Shader::enable() {
+   // Every shader and rendering call after glUseProgram will now use the shader
    glUseProgram(ID);
+}
+
+void Shader::disable() {
+   // Every shader and rendering call after glUseProgram will now use the shader
+   glUseProgram(0);
 }
 
 void Shader::setBool(const std::string &name, bool value) const
@@ -154,6 +159,32 @@ void Shader::setMat4(const std::string &name, const mat4x4 &mat) const
 {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
+void Shader::enableAttribute(const std::string &name, int count, int stride, void* ptr) const
+{
+    GLint attr = glGetAttribLocation(ID, name.c_str());
+    if (attr == -1) 
+    {
+        fprintf(stderr, "Shader has no attribute called '%s'\n", name);
+    } 
+    else
+    {
+        glEnableVertexAttribArray(attr);  
+        glVertexAttribPointer(attr, count, GL_FLOAT, GL_FALSE, sizeof(float) * stride, ptr);
+    }
+}
+
+void Shader::disableAttribute(const std::string& name) const {
+    GLint attr = glGetAttribLocation(ID, name.c_str());
+    if (attr == -1)
+    {
+        fprintf(stderr, "Shader has no attribute called '%s'\n", name);
+    } 
+    else 
+    {
+        glDisableVertexAttribArray(attr);  
+    }
+}
+
 /*
 // ------------------------------------------------------------------------
 void setVec2(const std::string &name, const glm::vec2 &value) const
