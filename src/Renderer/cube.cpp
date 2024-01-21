@@ -1,5 +1,6 @@
 #include "cube.hpp"
 
+
 // Create the implementation of stb_image by including it
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -19,12 +20,6 @@ void Cube::init(Vertex *vertexData) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices) * 6, indices, GL_STATIC_DRAW);
 */
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 
     // Load and create textures
     glGenTextures(1, &texture);  
@@ -54,7 +49,7 @@ void Cube::init(Vertex *vertexData) {
     glBindVertexArray(0); 
 }
 
-void Cube::draw() {
+void Cube::draw(Shader& shader) {
     // bind Texture
     glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -72,12 +67,17 @@ void Cube::draw() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 */
+
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    shader.enableAttribute("aPos", 3, 5, (void*)0);
+
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    //glEnableVertexAttribArray(0);
     // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    shader.enableAttribute("aTexCoord", 2, 5, (void*)(sizeof(float) * 3));
+
+    //glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    //glEnableVertexAttribArray(1);
 
 /*
     // We have to specify how OpenGL interprets the vertex data before rendering
@@ -97,8 +97,11 @@ void Cube::draw() {
     //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     //glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(0);
+
+    shader.disableAttribute("aPos");
+    shader.disableAttribute("aTexCoord");
+    //glDisableVertexAttribArray(1);
+    //glDisableVertexAttribArray(0);
 
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     

@@ -1,7 +1,10 @@
 #pragma once
 
 #include <glad/glad.h> 
+
 #include "linmath.h"
+
+#include "shader.hpp"
 #include "common.h"
 
 
@@ -16,7 +19,7 @@ public:
 
     void init(Vertex *vertexData);
 
-    void draw();
+    void draw(Shader& shader);
 private:
     //Vertex vertexData;
 
