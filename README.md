@@ -20,6 +20,12 @@ ROADMAP
 
 Patch notes
 -----------
+21.1.2024
+
+- Updated shader to have functions for enabling/disabling vertex attributes
+- Cube now takes reference to shader for more convenient vertex attribute handling
+- Redundant code removed from Cube initialization
+
 20.1.2024
 
 - Added 3D cubes and 10 of them rotating on the scene
