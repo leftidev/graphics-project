@@ -3,7 +3,15 @@ add_library(renderer_folder INTERFACE)
 target_include_directories(renderer_folder INTERFACE .)
 target_include_directories(renderer_folder INTERFACE ${PROJECT_SOURCE_DIR}/include)
 
-add_library(window window.cpp shader.cpp cube.cpp rectangle.cpp renderer.cpp texture.cpp)
+add_library(window 
+    window.cpp 
+    shader.cpp 
+    cube.cpp 
+    rectangle.cpp 
+    renderer.cpp 
+    texture.cpp 
+    camera.cpp
+)
 
 target_link_libraries(window
     PUBLIC
