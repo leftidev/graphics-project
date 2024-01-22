@@ -31,8 +31,10 @@ void Renderer::init(Vertex *vertexData)
     glBindVertexArray(0); 
 }
 
-void Renderer::draw() {
-
+void Renderer::draw() 
+{
+    m_shader.enable();
+    
     vec3 cubePositions[] = {
       { 0.0f,  0.0f,  0.0f},
       { 2.0f,  5.0f, -15.0f},
@@ -67,7 +69,7 @@ void Renderer::draw() {
     //mat4x4_translate(view, x, y, -3.0f);
     //mat4x4_ortho(proj, -RATIO, RATIO, -1.f, 1.f, 1.f, -1.f);
 
-    m_shader.enable();
+    
     for (unsigned int i = 0; i < 10; i++)
     {
     // calculate the model matrix for each object and pass it to shader before drawing
@@ -138,6 +140,8 @@ void Renderer::draw() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     }
+    glActiveTexture(GL_TEXTURE0);
+    m_shader.disable();
 }
 
 void Renderer::render(Shader& shader)
