@@ -35,7 +35,20 @@ void Renderer::draw(Renderable* r)
     mat4x4_identity(proj);
 
     mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
-    mat4x4_translate(view, 0.0f, 0.0f, -3.0f);
+    //mat4x4_translate(view, 0.0f, 0.0f, -13.0f);
+    
+    vec3 eye = {0.0f, 0.0f, 3.0f};
+    vec3 center = {0.0f, 0.0f, 0.0f};
+    vec3 up = {0.0f, 1.0f, 0.0f};
+    //mat4x4_look_at(view, eye, center, up);
+
+    // Create a camera rotating around the scene
+    const float radius = 10.0f;
+    float camX = sin(glfwGetTime()) * radius;
+    float camZ = cos(glfwGetTime()) * radius;
+    vec3 eyeRotate = {camX, 0.0f, camZ};
+    
+    mat4x4_look_at(view, eyeRotate, center, up);
 
     // Retrieve matrix uniform locations and pass them to shaders
     m_shader.setMat4("projection", proj);
