@@ -2,12 +2,15 @@
 
 #include <glad/glad.h> 
 
+#include <string>
 
 class Texture
 {
 public:
-    Texture();
-    ~Texture() {};
+   Texture() = default;
+   ~Texture() = default;
+
+    void init(const std::string& path);
 
     int getHandle() { return texture; };
 
