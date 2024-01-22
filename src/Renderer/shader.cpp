@@ -67,7 +67,8 @@ void checkShaderLinkErrors(unsigned int shader)
    }
 }
 
-void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
+void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) 
+{
    // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
@@ -133,13 +134,15 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) {
    glDeleteShader(fragmentShader);  
 }
 
-void Shader::enable() {
-   // Every shader and rendering call after glUseProgram will use the shader
+void Shader::enable() 
+{
    glUseProgram(ID);
 }
 
-void Shader::disable() {
-   glUseProgram(0);
+void Shader::disable() 
+{
+    glActiveTexture(GL_TEXTURE0);   
+    glUseProgram(0);
 }
 
 void Shader::enableAttribute(const std::string &name, int count, int stride, void* ptr)
