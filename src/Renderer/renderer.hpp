@@ -6,29 +6,16 @@
 
 #include "shader.hpp"
 #include "texture.hpp"
-#include "common.h"
+#include "renderable.hpp"
 
 
 class Renderer {
 public:
-    Renderer() {};
-    ~Renderer() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        //glDeleteBuffers(1, &EBO);
-    };
+    Renderer();
+    ~Renderer() {}
 
-    void init(Vertex *vertexData);
-
-    void draw();
+    void draw(Renderable* r);
 private:
-    void render(Shader& shader);
-
-    Texture m_texture{};
-
+    Texture m_texture;
     Shader m_shader;
-
-    unsigned int VAO;
-    unsigned int VBO;
-    //unsigned int EBO;
 };
