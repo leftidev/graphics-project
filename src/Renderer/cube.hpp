@@ -2,32 +2,15 @@
 
 #include <glad/glad.h> 
 
-#include "linmath.h"
-
-#include "shader.hpp"
-#include "texture.hpp"
+#include "renderable.hpp"
 #include "common.h"
 
 
 
-class Cube {
+class Cube: public Renderable {
 public:
-    Cube() {};
-    ~Cube() {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        //glDeleteBuffers(1, &EBO);
-    };
+    Cube();
+    ~Cube();
 
-    void init(Vertex *vertexData);
-
-    void draw(Shader& shader);
-private:
-    //Vertex vertexData;
-
-    Texture m_texture{};
-    //unsigned int texture;
-    unsigned int VAO;
-    unsigned int VBO;
-    //unsigned int EBO;
+    void init();
 };

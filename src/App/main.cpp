@@ -3,6 +3,7 @@
 #include "window.hpp"
 #include "shader.hpp"
 #include "renderer.hpp"
+#include "cube.hpp"
 
 
 enum PolygonMode {
@@ -142,73 +143,17 @@ int main(int argc, char** argv)
    // -----------------------------
    glEnable(GL_DEPTH_TEST);
 
+   Renderer renderer;
+
+
+
    unsigned int indices[] = {
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
    };
 
-
-   Vertex vertices[] = {
-   {-0.5f, -0.5f, -0.5f,  0.0f, 0.0f },
-   {  0.5f, -0.5f, -0.5f,  1.0f, 0.0f},
-   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
-   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
-   { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f},
-   { -0.5f, -0.5f, -0.5f,  0.0f, 0.0f},
-
-   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
-   {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f},
-   {  0.5f,  0.5f,  0.5f,  1.0f, 1.0f},
-   {  0.5f,  0.5f,  0.5f,  1.0f, 1.0f},
-   { -0.5f,  0.5f,  0.5f,  0.0f, 1.0f},
-   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
-
-   { -0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
-   { -0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
-   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
-   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
-   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
-   { -0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
-
-   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
-   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
-   {  0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
-   {  0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
-   {  0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
-   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
-
-   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
-   {  0.5f, -0.5f, -0.5f,  1.0f, 1.0f},
-   {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f},
-   {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f},
-   { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f},
-   { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f},
-
-   { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f},
-   {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f},
-   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
-   {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f},
-   { -0.5f,  0.5f,  0.5f,  0.0f, 0.0f},
-   { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f}
-};
-
-
-// world space positions of our cubes
-   vec3 cubePositions[] = {
-      { 0.0f,  0.0f,  0.0f},
-      { 2.0f,  5.0f, -15.0f},
-      {-1.5f, -2.2f, -2.5f},
-      {-3.8f, -2.0f, -12.3f},
-      { 2.4f, -0.4f, -3.5f},
-      {-1.7f,  3.0f, -7.5f},
-      { 1.3f, -2.0f, -2.5f},
-      { 1.5f,  2.0f, -2.5f},
-      { 1.5f,  0.2f, -1.5f},
-      {-1.3f,  1.0f, -1.5f}
-   };
-
-   Renderer cubes;
-   cubes.init(vertices);
+   // Renderables
+   Cube cube;
 
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -219,9 +164,10 @@ int main(int argc, char** argv)
       glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      cubes.draw();
+      // Render
+      renderer.draw(&cube);
 
-      // check and call events and swap the buffers
+      // Check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());
       glfwPollEvents();
    }
