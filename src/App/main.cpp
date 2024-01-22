@@ -128,7 +128,7 @@ int main(int argc, char** argv)
 {
    (void)argc;
    (void)argv;
-   
+
    glfwSetErrorCallback(errorCallback);
 
    Window window;
@@ -146,7 +146,6 @@ int main(int argc, char** argv)
    Renderer renderer;
 
 
-
    unsigned int indices[] = {
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
@@ -161,7 +160,7 @@ int main(int argc, char** argv)
       processInput(window.getHandle());
 
       // Rendering commands
-      glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+      glClearColor(0.2f, 1.0f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // Render
