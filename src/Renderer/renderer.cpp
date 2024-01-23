@@ -12,7 +12,7 @@ Renderer::Renderer()
     m_texture.init("../data/images/container.jpg");
 }
 
-void Renderer::draw(Renderable* r, Camera* cam) 
+void Renderer::draw(Renderable& r, Camera& cam) 
 {
     m_shader.enable();
 
@@ -31,7 +31,7 @@ void Renderer::draw(Renderable* r, Camera* cam)
 
     mat4x4 proj, model;
     // Create transformations
-    mat4x4_identity(cam->view);
+    mat4x4_identity(cam.view);
     mat4x4_identity(proj);
 
     mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
@@ -49,11 +49,11 @@ void Renderer::draw(Renderable* r, Camera* cam)
     //vec3 eyeRotate = {camX, 0.0f, camZ};
     
     //mat4x4_look_at(view, eyeRotate, center, up);
-    mat4x4_look_at(cam->view, cam->cameraPos, cam->cameraDirection, cam->cameraUp);
+    mat4x4_look_at(cam.view, cam.cameraPos, cam.cameraDirection, cam.cameraUp);
 
     // Retrieve matrix uniform locations and pass them to shaders
     m_shader.setMat4("projection", proj);
-    m_shader.setMat4("view", cam->view);
+    m_shader.setMat4("view", cam.view);
     // NOTE: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
     // Test transformations
@@ -80,8 +80,8 @@ void Renderer::draw(Renderable* r, Camera* cam)
         // bind Texture
         glBindTexture(GL_TEXTURE_2D, m_texture.getHandle());
 
-        glBindVertexArray(r->vertexVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, r->vertexVBO);
+        glBindVertexArray(r.vertexVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, r.vertexVBO);
         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
         m_shader.enableAttribute("aPos", 3, 5, (void*)0);

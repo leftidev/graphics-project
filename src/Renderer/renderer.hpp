@@ -14,7 +14,7 @@ public:
     Renderer();
     ~Renderer() {}
 
-    void draw(Renderable* r, Camera* cam);
+    void draw(Renderable& r, Camera& cam);
 private:
     Texture m_texture;
     Shader m_shader;

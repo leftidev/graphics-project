@@ -188,7 +188,7 @@ int main(int argc, char** argv)
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // Render
-      renderer.draw(&cube, &cam);
+      renderer.draw(cube, cam);
 
       // Check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());
