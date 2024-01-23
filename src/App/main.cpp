@@ -4,6 +4,7 @@
 #include "shader.hpp"
 #include "renderer.hpp"
 #include "cube.hpp"
+#include "camera.hpp"
 
 
 enum PolygonMode {
@@ -21,6 +22,8 @@ static float sy = 1.0f;
 static float sz = 1.0f;
 
 static PolygonMode mode = FILL;
+
+Camera cam;
 
 
 void errorCallback(int error, const char* description)
@@ -75,6 +78,27 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
          printf("Wireframe mode off\n");
       }
    }
+   //const float cameraSpeed = 0.05f; // adjust accordingly
+
+   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+      //cam.cameraPos += cam.cameraSpeed * cam.cameraFront;
+      //vec3_mul_inner(cam.cameraSpeed, cam.cameraFront);
+      //vec3_scale(&cam.cameraFront[2], &cam.cameraFront[2], cam.cameraSpeed);
+      vec3_sub(&cam.cameraPos[0], &cam.cameraPos[0], &cam.cameraSpeed);      
+   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+         //vec3_scale(&cam.cameraFront[2], &cam.cameraFront[2], cam.cameraSpeed);
+         vec3_add(&cam.cameraPos[0], &cam.cameraPos[0], &cam.cameraSpeed);
+      /*
+   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+   {
+      vec3_mul_cross(cam.cameraRight, cam.cameraFront, cam.cameraUp);
+      vec3_norm(cam.cameraRight, cam.cameraRight);
+      cam.cameraRight * cam.cameraSpeed;
+   }
+
+   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+      cam.cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+*/
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -145,14 +169,14 @@ int main(int argc, char** argv)
 
    Renderer renderer;
 
+   // Renderables
+   Cube cube;
 
+   
    unsigned int indices[] = {
       0, 1, 3, // first triangle
       1, 2, 3  // second triangle
    };
-
-   // Renderables
-   Cube cube;
 
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
@@ -164,7 +188,7 @@ int main(int argc, char** argv)
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // Render
-      renderer.draw(&cube);
+      renderer.draw(&cube, &cam);
 
       // Check and call events and swap the buffers
       glfwSwapBuffers(window.getHandle());

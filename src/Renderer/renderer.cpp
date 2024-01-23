@@ -12,7 +12,7 @@ Renderer::Renderer()
     m_texture.init("../data/images/container.jpg");
 }
 
-void Renderer::draw(Renderable* r) 
+void Renderer::draw(Renderable* r, Camera* cam) 
 {
     m_shader.enable();
 
@@ -29,30 +29,31 @@ void Renderer::draw(Renderable* r)
       {-1.3f,  1.0f, -1.5f}
    };
 
-    mat4x4 proj, view, model;
+    mat4x4 proj, model;
     // Create transformations
-    mat4x4_identity(view);
+    mat4x4_identity(cam->view);
     mat4x4_identity(proj);
 
     mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
     //mat4x4_translate(view, 0.0f, 0.0f, -13.0f);
     
-    vec3 eye = {0.0f, 0.0f, 3.0f};
-    vec3 center = {0.0f, 0.0f, 0.0f};
-    vec3 up = {0.0f, 1.0f, 0.0f};
+    //vec3 eye = {0.0f, 0.0f, 3.0f};
+    //vec3 center = {0.0f, 0.0f, 0.0f};
+    //vec3 up = {0.0f, 1.0f, 0.0f};
     //mat4x4_look_at(view, eye, center, up);
 
     // Create a camera rotating around the scene
-    const float radius = 10.0f;
-    float camX = sin(glfwGetTime()) * radius;
-    float camZ = cos(glfwGetTime()) * radius;
-    vec3 eyeRotate = {camX, 0.0f, camZ};
+    //const float radius = 10.0f;
+    //float camX = sin(glfwGetTime()) * radius;
+    //float camZ = cos(glfwGetTime()) * radius;
+    //vec3 eyeRotate = {camX, 0.0f, camZ};
     
-    mat4x4_look_at(view, eyeRotate, center, up);
+    //mat4x4_look_at(view, eyeRotate, center, up);
+    mat4x4_look_at(cam->view, cam->cameraPos, cam->cameraDirection, cam->cameraUp);
 
     // Retrieve matrix uniform locations and pass them to shaders
     m_shader.setMat4("projection", proj);
-    m_shader.setMat4("view", view);
+    m_shader.setMat4("view", cam->view);
     // NOTE: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
     // Test transformations

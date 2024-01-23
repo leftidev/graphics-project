@@ -2,6 +2,7 @@
 
 Camera::Camera() 
 {
+    /*
     // Camera direction
     // Subtracting the camera position vector from the scene's origin vector (cameraTarget) results in the camera direction vector.
     vec3_sub(cameraDirection, cameraPos, cameraTarget);
@@ -17,6 +18,10 @@ Camera::Camera()
     // Retrieving the vector that points to the camera's positive y-axis is relatively easy: we take the cross product of the right and direction vector.
     vec3_mul_cross(cameraUp, cameraDirection, cameraRight);
     // Using these camera vectors we can now create a LookAt matrix that proves very useful for creating a camera.
+*/
+    //mat4x4_identity(view);
+    //vec3_add(cameraDirection, cameraPos, cameraFront);
+    //mat4x4_look_at(view, cameraPos, cameraDirection, cameraUp);
 }
 
 Camera::~Camera() 
