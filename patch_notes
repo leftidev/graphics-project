@@ -1,5 +1,10 @@
 Patch notes
 -----------
+23.1.2024
+
+- Added basic example of moving camera with W, S keys
+
+
 22.1.2024
 
 - Massives refactors to vertex handling via Renderable-interfaces and renderer
