@@ -1,42 +1,5 @@
 #include "shader.hpp"
 
-
-// Create a very basic vertex shader in GLSL
-// Give input vertex data in normalized device coordinates
-const char* vertexShaderSource3 = "#version 330 core\n"
-    "layout (location = 0) in vec3 Pos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(Pos.x, Pos.y, Pos.z, 1.0);\n"
-    "}\0";
-
-// Testing
-const char* vertexShaderSource2 = "#version 330 core\n"
-    "layout(location = 0) in vec3 vertexPosition_modelspace;\n"
-    "uniform mat4 MVP;\n"
-    "void main()\n"
-    "{\n"
-    "   vec4 v = vec4(vertexPosition_modelspace,1);\n"
-    "   gl_Position = MVP * v;\n"
-    "}\0";
-
-// Testing 2
-const char* vertexShaderSource = "#version 330 core\n"
-    "layout(location = 0) in vec3 aPos;\n"
-    "uniform mat4 transform;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = transform * vec4(aPos, 1.0f);\n"
-    "}\0";
-
-// Create a very basic fragment shader in GLSL
-// Calculate the color output of pixels
-const char* fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
    
 // Check for compile-time errors on shader compilation
 // TODO: Add check: which shader type?
@@ -49,7 +12,7 @@ void checkShaderCompileErrors(unsigned int shader)
    if(!success)
    {
       glGetShaderInfoLog(shader, 512, NULL, infoLog);
-      fprintf(stderr, "SHADER ERROR COMPILATION: Shader compilation failed.\n '%s'\n", infoLog);
+      std::cerr << "ERROR: Compiling shader program failed. Info: " << infoLog << std::endl;
    }
 }
 
@@ -63,13 +26,13 @@ void checkShaderLinkErrors(unsigned int shader)
    if(!success)
    {
       glGetProgramInfoLog(shader, 512, NULL, infoLog);
-      fprintf(stderr, "SHADER ERROR LINKING: Linking shader program failed.\n '%s'\n", infoLog);
+      std::cerr << "ERROR: Linking shader program failed. Info: " << infoLog << std::endl;
    }
 }
 
-void Shader::init(const char *vertexFilePath, const char *fragmentFilePath) 
+void Shader::init(const char* vertexFilePath, const char* fragmentFilePath) 
 {
-   // 1. retrieve the vertex/fragment source code from filePath
+    // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
@@ -98,40 +61,40 @@ void Shader::init(const char *vertexFilePath, const char *fragmentFilePath)
         printf("SHADER ERROR: File not read successfully.");
     }
 
-   unsigned int vertexShader;
-   vertexShader = glCreateShader(GL_VERTEX_SHADER);
-   unsigned int fragmentShader;
-   fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-   
-   // Compile Vertex Shader
-	printf("Compiling vertex shader : '%s'\n", vertexFilePath);
-   char const *vertexSourcePointer = vertexCode.c_str();
-   glShaderSource(vertexShader, 1, &vertexSourcePointer, NULL);
-   glCompileShader(vertexShader);
-   checkShaderCompileErrors(vertexShader);
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-   // Compile Fragment Shader
-    printf("Compiling fragment shader : '%s'\n", fragmentFilePath);
-   char const *fragmentSourcePointer = fragmentCode.c_str();
-   glShaderSource(fragmentShader, 1, &fragmentSourcePointer, NULL);
-   glCompileShader(fragmentShader);
-   checkShaderCompileErrors(fragmentShader);
+    // Compile Vertex Shader
+    std::cout << "Compiling vertex shader: " << vertexFilePath << std::endl;
+    char const *vertexSourcePointer = vertexCode.c_str();
+    glShaderSource(vertexShader, 1, &vertexSourcePointer, NULL);
+    glCompileShader(vertexShader);
+    checkShaderCompileErrors(vertexShader);
 
-   // Link both shader objects into a shader program, that can be used for rendering
-   ID = glCreateProgram();
-   glAttachShader(ID, vertexShader);
-   glAttachShader(ID, fragmentShader);
-   glLinkProgram(ID);
+    // Compile Fragment Shader
+    std::cout << "Compiling fragment shader: " << fragmentFilePath << std::endl;
+    char const *fragmentSourcePointer = fragmentCode.c_str();
+    glShaderSource(fragmentShader, 1, &fragmentSourcePointer, NULL);
+    glCompileShader(fragmentShader);
+    checkShaderCompileErrors(fragmentShader);
 
-   checkShaderLinkErrors(ID);
+    // Link both shader objects into a shader program, that can be used for rendering
+    ID = glCreateProgram();
+    glAttachShader(ID, vertexShader);
+    glAttachShader(ID, fragmentShader);
+    glLinkProgram(ID);
 
-   // Detach shaders
-   glDetachShader(ID, vertexShader);
-	glDetachShader(ID, fragmentShader);
+    checkShaderLinkErrors(ID);
 
-   // Delete shader objects once they're linked into the program object
-   glDeleteShader(vertexShader);
-   glDeleteShader(fragmentShader);  
+    // Detach shaders
+    glDetachShader(ID, vertexShader);
+    glDetachShader(ID, fragmentShader);
+
+    // Delete shader objects once they're linked into the program object
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);  
 }
 
 void Shader::enable() 
@@ -145,12 +108,12 @@ void Shader::disable()
     glUseProgram(0);
 }
 
-void Shader::enableAttribute(const std::string &name, int count, int stride, void* ptr)
+void Shader::enableAttribute(const std::string& name, int count, int stride, void* ptr)
 {
     GLint attr = glGetAttribLocation(ID, name.c_str());
     if (attr == -1) 
     {
-        fprintf(stderr, "Shader has no attribute called '%s'\n", name);
+        std::cerr << "Shader has no attribute called " << name << std::endl;
     } 
     else
     {
@@ -164,7 +127,7 @@ void Shader::disableAttribute(const std::string& name)
     GLint attr = glGetAttribLocation(ID, name.c_str());
     if(attr == -1)
     {
-        fprintf(stderr, "Shader has no attribute called '%s'\n", name);
+        std::cerr << "Shader has no attribute called " << name << std::endl;
     } 
     else 
     {
@@ -178,7 +141,7 @@ void Shader::setTexture(const std::string& name, int index)
 
     if(location == -1) 
     {
-        fprintf(stderr, "Shader has no uniform called '%s'", name);
+        std::cerr << "Shader has no uniform called " << name << std::endl;
     } 
     else 
     {
@@ -190,19 +153,19 @@ void Shader::setTexture(const std::string& name, int index)
     }
 }
 
-void Shader::setBool(const std::string &name, bool value)
+void Shader::setBool(const std::string& name, bool value)
 {         
     glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); 
 }
-void Shader::setInt(const std::string &name, int value)
+void Shader::setInt(const std::string& name, int value)
 { 
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value); 
 }
-void Shader::setFloat(const std::string &name, float value)
+void Shader::setFloat(const std::string& name, float value)
 { 
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value); 
 } 
-void Shader::setMat4(const std::string &name, const mat4x4 &mat)
+void Shader::setMat4(const std::string& name, const mat4x4 &mat)
 {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }

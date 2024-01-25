@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include <glad/glad.h> 
 
@@ -22,11 +23,11 @@ public:
    void disable();
 
    // utility uniform functions
-    void setBool(const std::string &name, bool value) ;  
-    void setInt(const std::string &name, int value);   
-    void setFloat(const std::string &name, float value);
+    void setBool(const std::string& name, bool value) ;  
+    void setInt(const std::string& name, int value);   
+    void setFloat(const std::string& name, float value);
     void setMat4(const std::string& name, const mat4x4& mat);
-    void enableAttribute(const std::string &name, int count, int stride, void* ptr);
+    void enableAttribute(const std::string& name, int count, int stride, void* ptr);
     void disableAttribute(const std::string& name);
     void setTexture(const std::string& name, int index);
 
