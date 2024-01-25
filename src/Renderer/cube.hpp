@@ -6,10 +6,9 @@
 #include "common.h"
 
 
-
 class Cube: public Renderable {
 public:
-    Cube();
+    Cube() = default;
     ~Cube();
 
     void init();

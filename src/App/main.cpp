@@ -75,9 +75,11 @@ int main(int argc, char** argv)
    glEnable(GL_DEPTH_TEST);
 
    Renderer renderer;
+   renderer.init();
 
    // Renderables
    Cube cube;
+   cube.init();
    
    /*
    unsigned int indices[] = {
@@ -85,7 +87,7 @@ int main(int argc, char** argv)
       1, 2, 3  // second triangle
    };
    */
-  
+
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
 

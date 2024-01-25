@@ -10,6 +10,7 @@
 
 #include "linmath.h"
 
+
 void checkShaderCompileErrors(unsigned int shader);
 void checkShaderLinkErrors(unsigned int ID);
 

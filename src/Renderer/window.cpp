@@ -3,13 +3,9 @@
 #include <stdio.h>
 
 // Initialize GLFW, OpenGL context and glad. Create GLFW Window.
-void Window::init(uint16_t width, uint16_t height, const char* title) {
-    m_windowWidth = width;
-    m_windowHeight = height;
-    m_windowTitle = title;
-
+void Window::init(uint16_t width, uint16_t height, const std::string& title) {
     if(!glfwInit()) {
-        fprintf(stderr, "Unable to initialize GLFW\n");
+        std::cerr << "Unable to initialize GLFW" << std::endl;
     }
 
     // Setup OpenGL context
@@ -18,16 +14,17 @@ void Window::init(uint16_t width, uint16_t height, const char* title) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    m_window = glfwCreateWindow(m_windowWidth, m_windowHeight, m_windowTitle, nullptr, nullptr);
+    m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+
     if(!m_window) {
-        fprintf(stderr, "Unable to create GLFW window\n");
+        std::cerr << "Unable to create GLFW window" << std::endl;
         glfwTerminate();
     }
 
     glfwMakeContextCurrent(m_window);
 
     if(!gladLoadGL()) {
-        fprintf(stderr, "Unable to initialize glad\n");
+        std::cerr << "Unable to initialize glad" << std::endl;
         glfwDestroyWindow(m_window);
         glfwTerminate();
     }

@@ -4,10 +4,9 @@
 
 const float RATIO = 800 / (float) 600;
 
-Renderer::Renderer()
+
+void Renderer::init()
 {
-    //shader.init("../data/shaders/texture_vertex.vs", "../data/shaders/texture_fragment.fs");
-    //shader.init("../data/shaders/uniform_vertex.vs", "../data/shaders/uniform_fragment.fs");
     m_shader.init("../data/shaders/cube.vs", "../data/shaders/cube.fs");
     m_texture.init("../data/images/container.jpg");
 }

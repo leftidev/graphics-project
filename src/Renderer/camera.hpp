@@ -8,8 +8,8 @@
 
 class Camera {
 public:
-    Camera();
-    ~Camera();
+    Camera() = default;
+    ~Camera() = default;
 
     void init();
 
@@ -22,7 +22,4 @@ public:
     vec3 cameraRight{};
     vec3 cameraFront {0.0f, 0.0f, -1.0f};
     vec3 cameraUp {0.0f, 1.0f, 0.0f};
-private:
-
-
 };

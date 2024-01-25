@@ -11,10 +11,13 @@
 
 class Renderer {
 public:
-    Renderer();
-    ~Renderer() {}
+    Renderer() = default;
+    ~Renderer() = default;
+
+    void init();
 
     void draw(Renderable& r, Camera& cam);
+    
 private:
     Texture m_texture;
     Shader m_shader;
