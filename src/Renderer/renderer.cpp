@@ -48,7 +48,11 @@ void Renderer::draw(Renderable& r, Camera& cam)
     //vec3 eyeRotate = {camX, 0.0f, camZ};
     
     //mat4x4_look_at(view, eyeRotate, center, up);
-    mat4x4_look_at(cam.view, cam.cameraPos, cam.cameraDirection, cam.cameraUp);
+
+    vec3 temp{};
+    // Ensure the camera keeps looking at target direction when moving
+    vec3_add(temp, cam.cameraPos, cam.cameraFront);
+    mat4x4_look_at(cam.view, cam.cameraPos, temp, cam.cameraUp);
 
     // Retrieve matrix uniform locations and pass them to shaders
     m_shader.setMat4("projection", proj);

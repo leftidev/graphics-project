@@ -35,24 +35,35 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
       glfwSetWindowShouldClose(window, true);
 
    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-      //cam.cameraPos += cam.cameraSpeed * cam.cameraFront;
-      //vec3_mul_inner(cam.cameraSpeed, cam.cameraFront);
-      //vec3_scale(&cam.cameraFront[2], &cam.cameraFront[2], cam.cameraSpeed);
-      vec3_sub(&cam.cameraPos[0], &cam.cameraPos[0], &cam.cameraSpeed);      
+   {
+      vec3 forward{};
+      // Move the camera position forward
+      vec3_scale(forward, cam.cameraFront, cam.cameraSpeed);
+      vec3_add(cam.cameraPos, cam.cameraPos, forward);
+   }   
    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-         //vec3_scale(&cam.cameraFront[2], &cam.cameraFront[2], cam.cameraSpeed);
-         vec3_add(&cam.cameraPos[0], &cam.cameraPos[0], &cam.cameraSpeed);
-      /*
+   {
+      vec3 backward{};
+      // Move the camera position forward
+      vec3_scale(backward, cam.cameraFront, cam.cameraSpeed);
+      vec3_sub(cam.cameraPos, cam.cameraPos, backward);
+   }
    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
    {
-      vec3_mul_cross(cam.cameraRight, cam.cameraFront, cam.cameraUp);
-      vec3_norm(cam.cameraRight, cam.cameraRight);
-      cam.cameraRight * cam.cameraSpeed;
+      vec3 left{};
+      vec3_mul_cross(left, cam.cameraFront, cam.cameraUp);
+      vec3_norm(left, left);
+      vec3 test;
+      vec3_scale(test, left, cam.cameraSpeed);
+      vec3_sub(cam.cameraPos, cam.cameraPos, test);
    }
-
    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-      cam.cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-*/
+   {
+      vec3 right{};
+      vec3_mul_cross(right, cam.cameraFront, cam.cameraUp);
+      vec3_norm(right, right);
+      vec3_add(cam.cameraPos, cam.cameraPos, right);
+   }
 }
 
 
@@ -90,7 +101,6 @@ int main(int argc, char** argv)
 
    // Render loop
    while (!glfwWindowShouldClose(window.getHandle())) {
-
       // Rendering commands
       glClearColor(0.2f, 1.0f, 0.5f, 0.5f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
