@@ -5,6 +5,8 @@ temp/
 windows-bin/
 linux-bin/
 # 3rd party libraries
+include/math
+src/ThirdParty/corangemath.c
 dlls/
 include/libglfw3.a
 include/libglfw3dll.a
