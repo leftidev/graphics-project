@@ -28,12 +28,15 @@ void Renderer::draw(Renderable& r, Camera& cam)
       {-1.3f,  1.0f, -1.5f}
    };
 
-    mat4x4 proj, model;
+    //mat4x4 proj, model;
+    mat4x4 model;
     // Create transformations
     mat4x4_identity(cam.view);
-    mat4x4_identity(proj);
+   // mat4x4_identity(proj);
 
-    mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
+    //mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
+    mat4 proj = mat4_perspective_two(45.0f, 0.1f, 100.0f, RATIO);
+    //mat4 proj = mat4_perspective(0.785398163, 0.1, 512.0, RATIO);
     //mat4x4_translate(view, 0.0f, 0.0f, -13.0f);
     
     //vec3 eye = {0.0f, 0.0f, 3.0f};

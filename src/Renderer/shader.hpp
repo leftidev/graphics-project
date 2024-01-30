@@ -8,7 +8,7 @@
 
 #include <glad/glad.h> 
 
-#include "linmath.h"
+#include "common.h"
 
 
 void checkShaderCompileErrors(unsigned int shader);
@@ -28,6 +28,7 @@ public:
     void setInt(const std::string& name, int value);   
     void setFloat(const std::string& name, float value);
     void setMat4(const std::string& name, const mat4x4& mat);
+    void setMat4(const std::string& name, mat4 mat);
     void enableAttribute(const std::string& name, int count, int stride, void* ptr);
     void disableAttribute(const std::string& name);
     void setTexture(const std::string& name, int index);
