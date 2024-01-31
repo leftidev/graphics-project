@@ -15,7 +15,7 @@ void Renderer::draw(Renderable& r, Camera& cam)
 {
     m_shader.enable();
 
-    vec3 cubePositions[] = {
+    Vec3 cubePositions[] = {
       { 0.0f,  0.0f,  0.0f},
       { 2.0f,  5.0f, -15.0f},
       {-1.5f, -2.2f, -2.5f},
@@ -29,13 +29,17 @@ void Renderer::draw(Renderable& r, Camera& cam)
    };
 
     //mat4x4 proj, model;
-    mat4x4 model;
+    //mat4x4 model;
+    mat4 model = mat4_id();
+    //mat4_id(model);
     // Create transformations
     mat4x4_identity(cam.view);
    // mat4x4_identity(proj);
 
     //mat4x4_perspective(proj, 45.0f, RATIO, 0.1f, 100.0f);
-    mat4 proj = mat4_perspective_two(45.0f, 0.1f, 100.0f, RATIO);
+    mat4 proj; 
+    mat4_perspective_two(proj, 45.0f, 0.1f, 100.0f, RATIO);
+
     //mat4 proj = mat4_perspective(0.785398163, 0.1, 512.0, RATIO);
     //mat4x4_translate(view, 0.0f, 0.0f, -13.0f);
     
@@ -74,12 +78,9 @@ void Renderer::draw(Renderable& r, Camera& cam)
     for (unsigned int i = 0; i < 10; i++)
     {
         // calculate the model matrix for each object and pass it to shader before drawing
-        mat4x4_identity(model);
-
-        mat4x4_translate(model, cubePositions[i][0], cubePositions[i][1], cubePositions[i][2]);
-        mat4x4_rotate_X(model, model, (float) glfwGetTime());
-        mat4x4_rotate_Y(model, model, (float) glfwGetTime());
-        mat4x4_rotate_Z(model, model, (float) glfwGetTime());
+        model = mat4_mul_mat4(mat4_rotation_x((float)glfwGetTime()), mat4_rotation_y((float)glfwGetTime()));
+        model = mat4_mul_mat4(mat4_rotation_z((float)glfwGetTime()), model);
+        mat4_translation(model, cubePositions[i]);
 
         m_shader.setMat4("model", model);
 
